@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package>
+  <name>dr_util</name>
+  <version>1.0.0</version>
+  <description>Delft Robotics utility functions.</description>
+
+  <maintainer email="maarten@de-vri.es">Maarten de Vries</maintainer>
+
+  <license>GPLv3</license>
+
+  <author email="maarten@de-vri.es">Maarten de Vries</author>
+  <author email="hansg91@gmail.com">Hans Gaiser</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <export>
+  </export>
+</package>
