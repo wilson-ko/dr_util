@@ -14,18 +14,23 @@ namespace dr {
 		inline Eigen::Vector3d z() { return Eigen::Vector3d{0, 0 , 1}; };
 	}
 
-	inline Eigen::Matrix3d rotate_x(double angle) {
-		Eigen::AngleAxis<double> result{angle, axes::x()};
-		return result.matrix();
+	inline Eigen::Affine3d rotate_x(double angle) {
+		return Eigen::Affine3d{Eigen::AngleAxis<double>{angle, axes::x()}};
 	}
 
-	inline Eigen::Matrix3d rotate_y(double angle) {
-		Eigen::AngleAxis<double> result{angle, axes::y()};
-		return result.matrix();
+	inline Eigen::Affine3d rotate_y(double angle) {
+		return Eigen::Affine3d{Eigen::AngleAxis<double>{angle, axes::y()}};
 	}
 
-	inline Eigen::Matrix3d rotate_z(double angle) {
-		Eigen::AngleAxis<double> result{angle, axes::z()};
-		return result.matrix();
+	inline Eigen::Affine3d rotate_z(double angle) {
+		return Eigen::Affine3d{Eigen::AngleAxis<double>{angle, axes::z()}};
+	}
+
+	inline Eigen::Affine3d translate(Eigen::Vector3d translation) {
+		return Eigen::Affine3d{Eigen::Translation3d{translation}};
+	}
+
+	inline Eigen::Affine3d translate(double x, double y, double z) {
+		return translate(Eigen::Vector3d{x, y, z});
 	}
 }
