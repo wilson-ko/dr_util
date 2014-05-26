@@ -10,6 +10,9 @@ inline constexpr double pi() { return std::atan(1)*4; }
 /// Convert degrees to radians.
 inline constexpr double degrees(double angle) { return angle * pi() / 180.0; }
 
+/// Convert radians to degrees.
+inline constexpr double to_degrees(double angle) { return angle * 180.0 / pi(); }
+
 /// Calculate the square of a number.
 /**
  * \param a The number to square.
