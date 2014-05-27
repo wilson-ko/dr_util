@@ -5,7 +5,7 @@
 namespace dr {
 
 /// Get the value of pi as double.
-inline constexpr double pi() { return std::atan(1)*4; }
+inline constexpr double pi() { return 3.1415926535897932384626433832795028841971693993751058; }
 
 /// Convert degrees to radians.
 inline constexpr double degrees(double angle) { return angle * pi() / 180.0; }
