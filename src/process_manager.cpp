@@ -99,9 +99,8 @@ void ProcessManager::spin(){
 
 	ros::Rate loop_rate(10);
 
-	ROS_INFO("PREPARE SYSTEM COMMAND");
+
 	prepareSystem();
-	ROS_INFO("PREPARED");
 	ros::spinOnce();
 
 	while(ros::ok() && !trigger_abort_received_){
@@ -111,20 +110,18 @@ void ProcessManager::spin(){
 			loop_rate.sleep();
 			ros::spinOnce();
 		}
-		ROS_INFO("START COMMAND");
+
 		sendStartCommand();
-		ROS_INFO("STARTED");
+
 		while(ros::ok() && !trigger_stop_received_ && !trigger_abort_received_){
-			ROS_INFO("LOOPP");
+
 			step();
 			loop_rate.sleep();
 			ros::spinOnce();
 		}
-		ROS_INFO("LOOPP ENDED");
+
 		sendStopCommand();
-		ROS_INFO("SYSTEM STOPED");
 		resetSystem();
-		ROS_INFO("SYSTEM RESET");
 	}
 
 }
