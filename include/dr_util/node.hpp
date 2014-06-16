@@ -1,13 +1,18 @@
 #pragma once
+#include <vector>
 
 #include <ros/ros.h>
+#include <ros/console.h>
 
 
 namespace dr_util {
 
 /// Get a parameter from the ROS parameter server.
 template<typename T>
-T getParam(ros::NodeHandle const & node, std::string const & name) {
+T getParam(
+	ros::NodeHandle const & node, ///< The node handle to use for parameter name resolution.
+	std::string const & name      ///< The parameter to retrieve.
+) {
 	T value;
 	if (!node.getParam(name, value)) {
 		throw std::runtime_error(std::string("Failed to get parameter `") + name + "' (" + node.resolveName(name) + ").");
@@ -17,53 +22,45 @@ T getParam(ros::NodeHandle const & node, std::string const & name) {
 
 /// Get a parameter from the ROS parameter server.
 template<typename T>
-T getParam(ros::NodeHandle const & node, std::string const & name, T const & fallback) {
+T getParam(
+	ros::NodeHandle const & node, ///< The node handle to use for parameter name resolution.
+	std::string const & name,     ///< The parameter to retrieve.
+	T const & fallback,           ///< The fallback value to return if the parameter is not found.
+	bool warn = true              ///< If true, log a warning when the parameter was not found.
+) {
 	T value;
 
 	if (!node.getParam(name, value)) {
-		printf("Failed to get parameter `%s' (%s). Using the default value.\n",name.c_str(), node.resolveName(name).c_str());
-		value = fallback;
+		if (warn) {
+			ROS_WARN_STREAM("Failed to get parameter `" << name << "' (" << node.resolveName(name) << "). Using the default value.");
+		}
+		return fallback;
 	}
 
 	return value;
 }
 
-/// Get a list of parameters for the ROS parameter server.
+/// Get a vector from the ROS parameter server.
 template<typename T>
-std::vector<T> getParamList(ros::NodeHandle const & node, std::string const & name){
-	XmlRpc::XmlRpcValue list_xml;
-	std::vector<T> values;
-	if (!node.getParam(name,list_xml)) {
-		throw std::runtime_error(std::string("Failed to get parameter `") + name + "' (" + node.resolveName(name) + ").");
-	}
-	else {
-		if(list_xml.getType() != XmlRpc::XmlRpcValue::TypeArray)
-			throw std::runtime_error(std::string("Failed to get parameter `") + name + "' (" + node.resolveName(name) + "). Invalid type.");
-		for (int32_t i = 0; i < list_xml.size(); ++i) {
-			values.push_back(static_cast<T>(list_xml[i]));
-		}
-	}
-	return values;
+std::vector<T> getParamList(
+	ros::NodeHandle const & node, ///< The node handle to use for parameter name resolution.
+	std::string const & name      ///< The parameter to retrieve.
+) {
+	return getParam<std::vector<T>>(node, name);
 }
 
+/// Get a vector from the ROS parameter server.
 template<typename T>
-std::vector<T> getParamList(ros::NodeHandle const & node, std::string const & name, std::vector<T> const & fallback){
-	XmlRpc::XmlRpcValue list_xml;
-	std::vector<T> values;
-	if (!node.getParam(name,list_xml)) {
-		printf("Failed to get parameter `%s' (%s). Using the default value.\n",name.c_str(), node.resolveName(name).c_str());
-		values = fallback;
-	}
-	else {
-		if(list_xml.getType() != XmlRpc::XmlRpcValue::TypeArray)
-			throw std::runtime_error(std::string("Failed to get parameter `") + name + "' (" + node.resolveName(name) + "). Invalid type.");
-		for (int32_t i = 0; i < list_xml.size(); ++i) {
-			values.push_back(static_cast<T>(list_xml[i]));
-		}
-	}
-	return values;
+std::vector<T> getParamList(
+	ros::NodeHandle const & node,    ///< The node handle to use for parameter name resolution.
+	std::string const & name,        ///< The parameter to retrieve.
+	std::vector<T> const & fallback, ///< The fallback value to return if the parameter is not found.
+	bool warn = false                ///< If true, log a warning when the parameter was not found.
+) {
+	return getParam<std::vector<T>>(node, name, fallback, warn);
 }
 
+/// A ROS node wrapper with some utility functions.
 class Node {
 protected:
 	/// The ROS node handle.
