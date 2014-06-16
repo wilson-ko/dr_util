@@ -33,7 +33,7 @@ template<typename T>
 std::vector<T> getParamList(ros::NodeHandle const & node, std::string const & name){
 	XmlRpc::XmlRpcValue list_xml;
 	std::vector<T> values;
-	if (!node.getParam("objects_to_spawn",list_xml)) {
+	if (!node.getParam(name,list_xml)) {
 		throw std::runtime_error(std::string("Failed to get parameter `") + name + "' (" + node.resolveName(name) + ").");
 	}
 	else {
@@ -50,7 +50,7 @@ template<typename T>
 std::vector<T> getParamList(ros::NodeHandle const & node, std::string const & name, std::vector<T> const & fallback){
 	XmlRpc::XmlRpcValue list_xml;
 	std::vector<T> values;
-	if (!node.getParam("objects_to_spawn",list_xml)) {
+	if (!node.getParam(name,list_xml)) {
 		printf("Failed to get parameter `%s' (%s). Using the default value.\n",name.c_str(), node.resolveName(name).c_str());
 		values = fallback;
 	}
