@@ -1,10 +1,11 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(dr_util)
 
-find_package(catkin REQUIRED)
-
 find_package(catkin REQUIRED COMPONENTS
-  cmake_modules)
+	roscpp
+	cmake_modules
+)
+
 find_package(TinyXML REQUIRED)
 
 catkin_package(
