@@ -13,6 +13,22 @@ inline constexpr double degrees(double angle) { return angle * pi() / 180.0; }
 /// Convert radians to degrees.
 inline constexpr double to_degrees(double angle) { return angle * 180.0 / pi(); }
 
+/// Get the sign of a number.
+template<typename T>
+inline constexpr int sign(T const & value) { return (value > 0) - (value < 0); }
+
+/// Get an angle in the [0, 2*Pi) range.
+inline constexpr double normalizeAngle(double angle) {
+	return std::fmod(angle, 2 * pi()) + (angle < 0) * 2 * pi();
+}
+
+/// Return an angle in a specific range.
+inline constexpr double angleFrom(double angle, double range_start) {
+	return normalizeAngle(angle) + int(range_start / 2 / pi()) * 2 * pi()
+		+ (sign(range_start) ==  1 && normalizeAngle(angle) <  normalizeAngle(range_start)) *  2 * pi()
+		+ (sign(range_start) == -1 && normalizeAngle(angle) >= normalizeAngle(range_start)) * -2 * pi();
+}
+
 /// Calculate the square of a number.
 /**
  * \param a The number to square.
