@@ -7,16 +7,16 @@
 
 #include "dr_util/process_manager.h"
 
-ProcessManager::ProcessManager() {
+dr::ProcessManager::ProcessManager() {
 	n_ = NULL;
 	initialized_ = false;
 }
 
-ProcessManager::ProcessManager(ros::NodeHandle * n) {
+dr::ProcessManager::ProcessManager(ros::NodeHandle * n) {
 	initialize(n);
 }
 
-void ProcessManager::initialize(ros::NodeHandle * n){
+void dr::ProcessManager::initialize(ros::NodeHandle * n){
 	n_ = n;
 	getGeneralParameters();
 	getProcessSpecificParameters();
@@ -26,13 +26,13 @@ void ProcessManager::initialize(ros::NodeHandle * n){
 	initialized_ = true;
 }
 
-void ProcessManager::reset(){
+void dr::ProcessManager::reset(){
 	trigger_start_received_ = false;
 	trigger_stop_received_ = false;
 	trigger_abort_received_ = false;
 }
 
-void ProcessManager::getGeneralParameters(){
+void dr::ProcessManager::getGeneralParameters(){
 
 	if (!n_->getParam("wait_external_trigger_for_start", wait_external_trigger_for_start_)) {
 		bool default_val = false;
@@ -48,7 +48,7 @@ void ProcessManager::getGeneralParameters(){
 
 }
 
-void ProcessManager::initializeBasicMessagesServices(){
+void dr::ProcessManager::initializeBasicMessagesServices(){
 	srv_clnt_start_ = n_->serviceClient<std_srvs::Empty>("start_process");
 	srv_clnt_stop_ = n_->serviceClient<std_srvs::Empty>("stop_process");
 	srvsrv_ext_start_trig_ = n_->advertiseService("external_start_trigger", &ProcessManager::callbackExtStartTrigger, this);
@@ -56,22 +56,22 @@ void ProcessManager::initializeBasicMessagesServices(){
 	srvsrv_ext_abort_trig_ = n_->advertiseService("external_abort_trigger", &ProcessManager::callbackExtAbortTrigger, this);
 }
 
-bool ProcessManager::callbackExtStartTrigger(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res){
+bool dr::ProcessManager::callbackExtStartTrigger(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res){
 	trigger_start_received_ = true;
 	return true;
 }
 
-bool ProcessManager::callbackExtStopTrigger(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res){
+bool dr::ProcessManager::callbackExtStopTrigger(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res){
 	trigger_stop_received_ = true;
 	return true;
 }
 
-bool ProcessManager::callbackExtAbortTrigger(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res){
+bool dr::ProcessManager::callbackExtAbortTrigger(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res){
 	trigger_abort_received_ = true;
 	return true;
 }
 
-void ProcessManager::sendStartCommand(){
+void dr::ProcessManager::sendStartCommand(){
 	if(!initialized_){
 		ROS_INFO("[process_manager]: Process manager is used before being initialized. Cannot execute start process command.");
 		return;
@@ -80,7 +80,7 @@ void ProcessManager::sendStartCommand(){
 	srv_clnt_start_.call(srv);
 }
 
-void ProcessManager::sendStopCommand(){
+void dr::ProcessManager::sendStopCommand(){
 	if(!initialized_){
 		ROS_INFO("[process_manager]: Process manager is used before being initialized. Cannot execute stop process command.");
 		return;
@@ -89,7 +89,7 @@ void ProcessManager::sendStopCommand(){
 	srv_clnt_stop_.call(srv);
 }
 
-void ProcessManager::spin(){
+void dr::ProcessManager::spin(){
 	if(!initialized_){
 		ROS_INFO("[process_manager]: Process manager is used before being initialized. Cannot execute spin command.");
 		return;
@@ -126,7 +126,7 @@ void ProcessManager::spin(){
 
 }
 
-ProcessManager::~ProcessManager() {
+dr::ProcessManager::~ProcessManager() {
 
 }
 
