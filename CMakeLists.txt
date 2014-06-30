@@ -24,3 +24,4 @@ install(DIRECTORY include/${PROJECT_NAME}/
 )
 
 add_library(process_manager src/process_manager.cpp)
+target_link_libraries(process_manager ${catkin_LIBRARIES})
