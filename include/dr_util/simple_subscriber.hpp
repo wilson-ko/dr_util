@@ -48,6 +48,10 @@ public:
 		return message_; 
 	}
 
+	bool isFirstMessageReceived() const{
+		return message_received_;
+	}
+
 private:
 	/// Handle received messages.
 	void onMessage(Message const & message) {
