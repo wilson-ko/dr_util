@@ -5,7 +5,7 @@
  *      Author: bcalli
  */
 
-#include "dr_util/process_manager.h"
+#include "dr_process_manager/process_manager.h"
 
 dr::ProcessManager::ProcessManager() {
 	n_ = NULL;
@@ -18,21 +18,20 @@ dr::ProcessManager::ProcessManager(ros::NodeHandle * n) {
 
 void dr::ProcessManager::initialize(ros::NodeHandle * n){
 	n_ = n;
-	getGeneralParameters();
-	getProcessSpecificParameters();
-	reset();
-	initializeBasicMessagesServices();
-	initializeProcessSpecificMessagesServices();
+	getParameters();
+	initialize_();
+	initializeMessagesServices();
+	trigger_start_received_ = false;
+	trigger_stop_received_ = false;
+	trigger_abort_received_ = false;
 	initialized_ = true;
 }
 
 void dr::ProcessManager::reset(){
-	trigger_start_received_ = false;
-	trigger_stop_received_ = false;
-	trigger_abort_received_ = false;
+
 }
 
-void dr::ProcessManager::getGeneralParameters(){
+void dr::ProcessManager::getParameters(){
 
 	if (!n_->getParam("wait_external_trigger_for_start", wait_external_trigger_for_start_)) {
 		bool default_val = false;
@@ -48,7 +47,7 @@ void dr::ProcessManager::getGeneralParameters(){
 
 }
 
-void dr::ProcessManager::initializeBasicMessagesServices(){
+void dr::ProcessManager::initializeMessagesServices(){
 	srv_clnt_start_ = n_->serviceClient<std_srvs::Empty>("start_process");
 	srv_clnt_stop_ = n_->serviceClient<std_srvs::Empty>("stop_process");
 	srvsrv_ext_start_trig_ = n_->advertiseService("external_start_trigger", &ProcessManager::callbackExtStartTrigger, this);
@@ -91,7 +90,7 @@ void dr::ProcessManager::sendStopCommand(){
 
 void dr::ProcessManager::spin(){
 	if(!initialized_){
-		ROS_INFO("[process_manager]: Process manager is used before being initialized. Cannot execute spin command.");
+		ROS_ERROR("[process_manager]: Process manager is used before being initialized. Cannot execute spin command.");
 		return;
 	}
 
@@ -114,7 +113,6 @@ void dr::ProcessManager::spin(){
 		sendStartCommand();
 
 		while(ros::ok() && !trigger_stop_received_ && !trigger_abort_received_){
-
 			step();
 			loop_rate.sleep();
 			ros::spinOnce();
