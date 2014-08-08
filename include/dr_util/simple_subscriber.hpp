@@ -14,8 +14,15 @@ private:
 
 	/// The internal subscriber used.
 	ros::Subscriber subscriber_;
+
+	/// The topic name.
 	std::string topic_name_ = "";
+
+	/// True if a message has been received.
 	bool message_received_ = false;
+
+	/// Signal to notify the wait function it can return.
+	bool wait_done_;
 
 public:
 	SimpleSubscriber(){
@@ -48,16 +55,31 @@ public:
 		return message_; 
 	}
 
-	bool isFirstMessageReceived() const{
+	/// Check if the subscriber has a message.
+	bool hasMessage() const {
 		return message_received_;
+	}
+
+	/// Wait for a message to a arrive.
+	bool wait(ros::Duration timeout = ros::Duration(0), ros::Rate rate = ros::Rate(10)) {
+		wait_done_ = false;
+		ros::Time start = ros::Time::now();
+
+		while (timeout == ros::Duration(0) || (ros::Time::now() - start) < timeout) {
+			ros::spinOnce();
+			if (wait_done_) return true;
+			rate.sleep();
+		}
+
+		return wait_done_;
 	}
 
 private:
 	/// Handle received messages.
 	void onMessage(Message const & message) {
-		message_ = message;
-		if(!message_received_)
-			message_received_ = true;
+		message_          = message;
+		message_received_ = true;
+		wait_done_        = true;
 	}
 };
 
