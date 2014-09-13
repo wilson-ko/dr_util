@@ -52,7 +52,7 @@ public:
 			ROS_ERROR("No messages has been received to the topic %s, but the message is requested.",topic_name_.c_str());
 		if(topic_name_ == "")
 			ROS_ERROR("Subscriber not initialized, but the message is requested.");
-		return message_; 
+		return message_;
 	}
 
 	/// Check if the subscriber has a message.
