@@ -10,7 +10,6 @@
 namespace dr {
 
 namespace {
-	struct sigaction sigaction_data = {};
 
 	void handleSigInt(int sig, siginfo_t * siginfo, void * context) {
 		(void) sig;
@@ -23,7 +22,10 @@ namespace {
 }
 
 int fixSigInt() {
-	sigaction_data.sa_flags = SA_SIGINFO;
+	struct sigaction sigaction_data;
+	sigemptyset(&sigaction_data.sa_mask);
+	sigaction_data.sa_handler   = nullptr;
+	sigaction_data.sa_flags     = SA_SIGINFO;
 	sigaction_data.sa_sigaction = &handleSigInt;
 	return sigaction(SIGINT, &sigaction_data, nullptr);
 }

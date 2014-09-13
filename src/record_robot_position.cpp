@@ -6,7 +6,7 @@
 int main(int argc, char** argv){
 	ros::init(argc, argv, "record_robot_pos");
 	ros::NodeHandle node;
-	
+
 	std::ofstream outfile;
 	outfile.open("robot_pos.yaml");
 
@@ -30,12 +30,12 @@ int main(int argc, char** argv){
 	data += "y: " + boost::lexical_cast<std::string>(transform.getRotation().y()) + ", ";
 	data += "z: " + boost::lexical_cast<std::string>(transform.getRotation().z()) + ", ";
 	data += "w: " + boost::lexical_cast<std::string>(transform.getRotation().w()) + "}\n";
-   // write inputted data into the file.
-   outfile << data << std::endl;
+	// write inputted data into the file.
+	outfile << data << std::endl;
 
-   // close the opened file.
-   outfile.close();
+	// close the opened file.
+	outfile.close();
 
-   ROS_INFO("The robot position is recored.");
-  return 0;
-};
+	ROS_INFO("The robot position is recored.");
+	return 0;
+}
