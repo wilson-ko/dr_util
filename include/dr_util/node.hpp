@@ -5,7 +5,11 @@
 #include <ros/console.h>
 
 
-namespace dr_util {
+namespace dr {
+
+/// Shorthand to get a ServiceEvent type for a service.
+template<typename Service>
+using ServiceEvent = ros::ServiceEvent<typename Service::Request, typename Service::Response>;
 
 /// Get a parameter from the ROS parameter server.
 template<typename T>
@@ -75,7 +79,7 @@ protected:
 	 */
 	template<typename T>
 	T getParam(std::string const & name) {
-		return dr_util::getParam<T>(node_handle_, name);
+		return dr::getParam<T>(node_handle_, name);
 	}
 
 	/// Get a parameter from the ROS parameter server.
@@ -84,7 +88,7 @@ protected:
 	 */
 	template<typename T>
 	T getParam(std::string const & name, T const & fallback) {
-		return dr_util::getParam<T>(node_handle_, name, fallback);
+		return dr::getParam<T>(node_handle_, name, fallback);
 	}
 
 	/// Get a list of parameters from the ROS parameter server.
@@ -93,7 +97,7 @@ protected:
 	 */
 	template<typename T>
 	std::vector<T> getParamList(std::string const & name) {
-		return dr_util::getParamList<T>(node_handle_, name);
+		return dr::getParamList<T>(node_handle_, name);
 	}
 
 	/// Get a list of parameters from the ROS parameter server.
@@ -102,7 +106,7 @@ protected:
 	 */
 	template<typename T>
 	std::vector<T> getParamList(std::string const & name, T const & fallback) {
-		return dr_util::getParamList<T>(node_handle_, name, fallback);
+		return dr::getParamList<T>(node_handle_, name, fallback);
 	}
 
 public:
