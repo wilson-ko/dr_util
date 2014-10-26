@@ -26,6 +26,10 @@ target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES})
 add_executable(record_robot_position src/record_robot_position.cpp)
 target_link_libraries(record_robot_position ${catkin_LIBRARIES})
 
+catkin_add_gtest(${PROJECT_NAME}_functional_test       test/functional.cpp)
+catkin_add_gtest(${PROJECT_NAME}_integer_sequence_test test/integer_sequence.cpp)
+catkin_add_gtest(${PROJECT_NAME}_tuple_test            test/tuple.cpp)
+
 install(DIRECTORY include/${PROJECT_NAME}/
 	DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
 	FILES_MATCHING PATTERN "*.hpp"
