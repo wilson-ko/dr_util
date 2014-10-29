@@ -47,7 +47,7 @@ public:
 	}
 
 	/// Get the last message received.
-	Message const & message() const { 
+	Message const & message() const {
 		if(!message_received_)
 			ROS_ERROR("No messages has been received to the topic %s, but the message is requested.",topic_name_.c_str());
 		if(topic_name_ == "")
