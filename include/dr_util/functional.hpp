@@ -13,13 +13,13 @@ namespace dr {
 		decltype(std::declval<F>()(std::get<I>(std::declval<Params<Args...>>())...))
 		_call(F & func, Params<Args...> const & params, index_sequence<I...>) {
 			return func(std::get<I>(params)...);
-		};
+		}
 
 		template<typename F, template<typename...> class Params, typename... Args, std::size_t... I>
 		decltype(std::declval<F const>()(std::get<I>(std::declval<Params<Args...>>())...))
 		_call(F const & func, Params<Args...> const & params, index_sequence<I...>) {
 			return func(std::get<I>(params)...);
-		};
+		}
 	}
 
 	template<typename F, template<typename...> class Params, typename... Args>
