@@ -1,6 +1,10 @@
 #pragma once
 
+#include <functional>
 #include <string>
+#include <vector>
+#include <mutex>
+
 #include <ros/ros.h>
 
 namespace dr {
@@ -24,9 +28,21 @@ private:
 	/// Signal to notify the wait function it can return.
 	bool wait_done_;
 
+	/// All synchronous wait operations started before this time should cancel themselves.
+	ros::Time cancel_before_{0, 0};
+
+	/// Vector of callbacks to invoke on the next message.
+	std::vector<std::function<void (Message const &)>> waiters_;
+
+	/// Mutex to obtain when accesing the message.
+	std::mutex message_mutex_;
+
+	/// Mutex to obtain when accesing the callback list.
+	std::mutex callback_mutex_;
+
 public:
-	SimpleSubscriber(){
-	}
+	SimpleSubscriber() {}
+
 	/// Construct the subscriber.
 	SimpleSubscriber(
 		ros::NodeHandle & node,                  ///< The node handle to use for name resolution.
@@ -41,7 +57,7 @@ public:
 		std::string const & topic,               ///< The name of the topic to subscribe to.
 		uint32_t queue_size = 10,                ///< The queue size for the wrapper subscriber.
 		ros::TransportHints transport_hints = {} ///< The transport hints for the wrapper subscriber.
-		){
+	){
 		subscriber_ = node.subscribe(topic, queue_size, &SimpleSubscriber::onMessage, this, transport_hints);
 		topic_name_ = topic;
 	}
@@ -68,18 +84,39 @@ public:
 		while (timeout == ros::Duration(0) || (ros::Time::now() - start) < timeout) {
 			ros::spinOnce();
 			if (wait_done_) return true;
+			if (ros::Time::now() <= cancel_before_) return false;
 			rate.sleep();
 		}
 
 		return wait_done_;
 	}
 
+	/// Register a callback to be called once when the next message arrives.
+	void asyncWait(std::function<void (Message const &)> callback) {
+		std::lock_guard<std::mutex> lock(callback_mutex_);
+		waiters_.push_back(callback);
+	};
+
+	/// Cancel all pending wait operations (synchronous and asynchronous).
+	void cancel() {
+		std::lock_guard<std::mutex> lock(callback_mutex_);
+		cancel_before_ = ros::Time::now();
+		waiters_.clear();
+	}
+
 private:
 	/// Handle received messages.
 	void onMessage(Message const & message) {
+		std::lock_guard<std::mutex> lock(message_mutex_);
+
 		message_          = message;
 		message_received_ = true;
 		wait_done_        = true;
+
+		{
+			std::lock_guard<std::mutex> lock(callback_mutex_);
+			for (auto const & callback : waiters_) callback(message);
+		}
 	}
 };
 
