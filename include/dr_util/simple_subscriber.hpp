@@ -16,6 +16,8 @@ private:
 	/// The cached message.
 	Message message_;
 
+	ros::Time time_{0, 0};
+
 	/// The internal subscriber used.
 	ros::Subscriber subscriber_;
 
@@ -53,11 +55,12 @@ public:
 		initialize(node, topic,queue_size,transport_hints);
 	}
 
+	/// Initialize the subscriber.
 	void initialize(ros::NodeHandle & node,      ///< The node handle to use for name resolution.
 		std::string const & topic,               ///< The name of the topic to subscribe to.
 		uint32_t queue_size = 10,                ///< The queue size for the wrapper subscriber.
 		ros::TransportHints transport_hints = {} ///< The transport hints for the wrapper subscriber.
-	){
+	) {
 		subscriber_ = node.subscribe(topic, queue_size, &SimpleSubscriber::onMessage, this, transport_hints);
 		topic_name_ = topic;
 	}
@@ -97,6 +100,29 @@ public:
 		waiters_.push_back(callback);
 	};
 
+	/// Register a callback to be called once when the next message arrives.
+	template<typename F>
+	void asyncWait(
+		std::function<void (Message const &, ros::Time const &)> callback, ///< Callback to be invoked when the condition becomes true.
+		F const & condition                                                ///< Condition to check. Will be called as condition(message, time);
+	) {
+		checkCondition(message(), time_, callback, condition);
+	}
+
+	/// Register a callback to be called once when the next message arrives.
+	template<typename F>
+	void asyncWait(
+		std::function<void (Message const &, ros::Time const &)> callback, ///< Callback to be invoked when the condition becomes true.
+		F const & condition,                                               ///< Condition to check. Will be called as condition(message, time);
+		ros::Duration const & grace_period                                 ///< Grace period to wait before checking the condition.
+	) {
+		ros::Time grace_end  = ros::Time::now() + grace_period;
+		checkCondition(message(), time_, callback, [condition, grace_end](Message const & message, ros::Time const & time) {
+			if (time < grace_end) return false;
+			return condition(message, time);
+		});
+	}
+
 	/// Cancel all pending wait operations (synchronous and asynchronous).
 	void cancel() {
 		std::lock_guard<std::mutex> lock(callback_mutex_);
@@ -110,6 +136,7 @@ private:
 		std::lock_guard<std::mutex> lock(message_mutex_);
 
 		message_          = message;
+		time_             = ros::Time::now();
 		message_received_ = true;
 		wait_done_        = true;
 
@@ -117,6 +144,28 @@ private:
 			std::lock_guard<std::mutex> lock(callback_mutex_);
 			for (auto const & callback : waiters_) callback(message);
 		}
+	}
+
+	/// Check a condition for a message and time.
+	/**
+	 * If the condition is true, a callback is invoked.
+	 * If the condition is false, the condition is requeued.
+	 */
+	template<typename F>
+	bool checkCondition(
+		Message const & message,                                            ///< The message to check the condition against.
+		ros::Time const & time,                                             ///< The time when the message arrived.
+		std::function<void (Message const &, ros::Time const &)> callback,  ///< The callback to invoke if the condition is true.
+		F const & condition                                                 ///< The condition to check. Invoked as condition(message, time).
+	) {
+		if (!condition(message, time)) {
+			waiters_.push_back([this, callback, condition] (Message const & message, ros::Time const & time) {
+				checkCondition(message, time, callback, condition);
+			});
+			return false;
+		}
+		callback(message, time);
+		return true;
 	}
 };
 
