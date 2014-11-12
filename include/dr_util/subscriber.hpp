@@ -11,7 +11,7 @@ namespace dr {
 
 /// Simple subscriber that remembers the last message received.
 template<typename Message>
-class SimpleSubscriber {
+class Subscriber {
 private:
 	/// The cached message.
 	Message message_;
@@ -43,10 +43,10 @@ private:
 	std::mutex callback_mutex_;
 
 public:
-	SimpleSubscriber() {}
+	Subscriber() {}
 
 	/// Construct the subscriber.
-	SimpleSubscriber(
+	Subscriber(
 		ros::NodeHandle & node,                  ///< The node handle to use for name resolution.
 		std::string const & topic,               ///< The name of the topic to subscribe to.
 		uint32_t queue_size = 10,                ///< The queue size for the wrapper subscriber.
@@ -61,7 +61,7 @@ public:
 		uint32_t queue_size = 10,                ///< The queue size for the wrapper subscriber.
 		ros::TransportHints transport_hints = {} ///< The transport hints for the wrapper subscriber.
 	) {
-		subscriber_ = node.subscribe(topic, queue_size, &SimpleSubscriber::onMessage, this, transport_hints);
+		subscriber_ = node.subscribe(topic, queue_size, &Subscriber::onMessage, this, transport_hints);
 		topic_name_ = topic;
 	}
 
