@@ -34,7 +34,7 @@ private:
 	ros::Time cancel_before_{0, 0};
 
 	/// Vector of callbacks to invoke on the next message.
-	std::vector<std::function<void (Message const &)>> waiters_;
+	std::vector<std::function<void (Message const &, ros::Time const &)>> waiters_;
 
 	/// Mutex to obtain when accesing the message.
 	std::mutex message_mutex_;
@@ -72,6 +72,11 @@ public:
 		if(topic_name_ == "")
 			ROS_ERROR("Subscriber not initialized, but the message is requested.");
 		return message_;
+	}
+
+	/// Returns time stamp.
+	ros::Time const time() {
+		return time_;
 	}
 
 	/// Check if the subscriber has a message.
@@ -142,7 +147,7 @@ private:
 
 		{
 			std::lock_guard<std::mutex> lock(callback_mutex_);
-			for (auto const & callback : waiters_) callback(message);
+			for (auto const & callback : waiters_) callback(message_, time_);
 		}
 	}
 
