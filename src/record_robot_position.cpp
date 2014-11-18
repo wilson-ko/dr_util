@@ -36,6 +36,6 @@ int main(int argc, char** argv){
 	// close the opened file.
 	outfile.close();
 
-	ROS_INFO("The robot position is recored.");
+	ROS_INFO("The robot position is recorded.");
 	return 0;
 }
