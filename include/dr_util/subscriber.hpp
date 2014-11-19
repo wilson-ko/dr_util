@@ -100,7 +100,7 @@ public:
 	}
 
 	/// Register a callback to be called once when the next message arrives.
-	void asyncWait(std::function<void (Message const &)> callback) {
+	void asyncWait(std::function<void (Message const &, ros::Time const &)> callback) {
 		std::lock_guard<std::mutex> lock(callback_mutex_);
 		waiters_.push_back(callback);
 	};
