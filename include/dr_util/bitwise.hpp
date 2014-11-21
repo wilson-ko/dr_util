@@ -25,4 +25,4 @@ namespace dr {
 	) {
 		return (value & bitMask(bit)) && !(old & bitMask(bit));
 	}
-};
+}
