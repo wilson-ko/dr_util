@@ -12,6 +12,10 @@ protected:
 	/// If true, all low signals should pass through.
 	bool always_low;
 
+public:
+	/// Construct a button filter.
+	ButtonFilter(bool always_high = false, bool always_low = false) : always_high(always_high), always_low(always_low) {}
+
 	/// Put the signal through the filter.
 	/**
 	 * \return True if the signal should be passed on, otherwise false.
