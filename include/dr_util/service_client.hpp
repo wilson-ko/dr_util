@@ -15,7 +15,7 @@ class ServiceClient {
 	using Response = typename Service::Response;
 
 	/// The node to use for connecting to services.
-	ros::NodeHandle * node_;
+	ros::NodeHandle * node_ = nullptr;
 
 	/// The internal service client.
 	ros::ServiceClient client_;
@@ -25,15 +25,16 @@ class ServiceClient {
 
 public:
 	/// Construct a service client without connecting it to a service.
-	ServiceClient(ros::NodeHandle & node) : node_(&node) {}
+	ServiceClient() {}
 
 	/// Construct a service client and connect it to a service.
 	ServiceClient(ros::NodeHandle & node, std::string const & name, ros::Duration timeout = ros::Duration(-1), bool verbose = true) : ServiceClient(node) {
-		connect(name, timeout, verbose);
+		connect(node, name, timeout, verbose);
 	}
 
 	/// Connect to a service by name.
-	bool connect(std::string name, ros::Duration const & timeout = ros::Duration(-1), bool verbose = true) {
+	bool connect(ros::NodeHandle & node, std::string name, ros::Duration const & timeout = ros::Duration(-1), bool verbose = true) {
+		node_   = &node;
 		name_   = name;
 		client_ = node_->serviceClient<Request, Response>(name_, true);
 		return wait(timeout, verbose);
