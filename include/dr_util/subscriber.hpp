@@ -93,10 +93,11 @@ public:
 		wait_done_ = false;
 		ros::Time start = ros::Time::now();
 
-		while (timeout == ros::Duration(0) || (ros::Time::now() - start) < timeout) {
+		while (timeout == ros::Duration(0) || ros::Time::now() < start + timeout) {
 			ros::spinOnce();
 			if (wait_done_) return true;
 			if (ros::Time::now() <= cancel_before_) return false;
+			if (!ros::ok()) return false;
 			rate.sleep();
 		}
 
