@@ -2,9 +2,12 @@
 
 #include <vector>
 #include <algorithm>
+#include <utility>
 
 #include <ros/ros.h>
 #include <ros/console.h>
+
+#include "disptach.hpp"
 
 
 namespace dr {
@@ -142,6 +145,12 @@ protected:
 	template<typename T>
 	std::vector<T> getParamList(std::string const & name, T const & fallback) {
 		return dr::getParamList<T>(node_handle_, name, fallback);
+	}
+
+	/// Dispatch a callback for later invocation.
+	template<typename F>
+	void dispatch(F && f) {
+		dr::dispatch(node_handle_, std::forward<F>(f));
 	}
 
 public:
