@@ -10,7 +10,7 @@ namespace dr {
 
 template<typename F>
 class RosCallbackWrapper : public ros::CallbackInterface {
-	F f;
+	typename std::decay<F>::type f;
 
 public:
 	RosCallbackWrapper(F && f) : f(std::forward<F>(f)) {};

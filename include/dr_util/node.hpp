@@ -7,7 +7,7 @@
 #include <ros/ros.h>
 #include <ros/console.h>
 
-#include "disptach.hpp"
+#include "dispatch.hpp"
 
 
 namespace dr {
