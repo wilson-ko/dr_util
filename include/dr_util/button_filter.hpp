@@ -1,3 +1,5 @@
+#pragma once
+
 namespace dr {
 
 /// Class to filter button events.
