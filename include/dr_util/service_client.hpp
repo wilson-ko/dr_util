@@ -30,16 +30,27 @@ public:
 	ServiceClient() {}
 
 	/// Construct a service client and connect it to a service.
-	ServiceClient(ros::NodeHandle & node, std::string const & name, ros::Duration timeout = ros::Duration(-1), bool verbose = true) : ServiceClient(node) {
-		connect(node, name, timeout, verbose);
+	ServiceClient(ros::NodeHandle & node, std::string const & name, bool wait = true, ros::Duration timeout = ros::Duration(-1), bool verbose = true) : ServiceClient(node) {
+		connect(node, name, wait, timeout, verbose);
+	}
+
+	/// Check if the service is connected.
+	bool isConnected() const {
+		return client_.isValid();
+	}
+
+	/// Check if the service is available.
+	bool isAvailable() {
+		return client_.exists();
 	}
 
 	/// Connect to a service by name.
-	bool connect(ros::NodeHandle & node, std::string name, ros::Duration const & timeout = ros::Duration(-1), bool verbose = true) {
+	bool connect(ros::NodeHandle & node, std::string name, bool wait = true, ros::Duration const & timeout = ros::Duration(-1), bool verbose = true) {
 		node_   = &node;
 		name_   = name;
 		client_ = node_->serviceClient<Request, Response>(name_, true);
-		return wait(timeout, verbose);
+		if (wait) return this->wait(timeout, verbose);
+		return client_.isValid();
 	}
 
 	/// Reconnect to the current service if the connection was dropped.
