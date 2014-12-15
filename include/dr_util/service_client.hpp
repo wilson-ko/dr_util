@@ -30,7 +30,7 @@ public:
 	ServiceClient() {}
 
 	/// Construct a service client and connect it to a service.
-	ServiceClient(ros::NodeHandle & node, std::string const & name, bool wait = true, ros::Duration timeout = ros::Duration(-1), bool verbose = true) : ServiceClient(node) {
+	ServiceClient(ros::NodeHandle & node, std::string const & name, bool wait = true, ros::Duration timeout = ros::Duration(-1), bool verbose = true) {
 		connect(node, name, wait, timeout, verbose);
 	}
 
