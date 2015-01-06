@@ -44,7 +44,7 @@ private:
 	std::mutex message_mutex_;
 
 	/// Mutex to obtain when accesing the callback list.
-	std::mutex callback_mutex_;
+	std::recursive_mutex callback_mutex_;
 
 public:
 	Subscriber() {}
@@ -106,13 +106,13 @@ public:
 
 	/// Register a callback to be called once when the next message arrives.
 	void asyncWait(Callback callback) {
-		std::lock_guard<std::mutex> lock(callback_mutex_);
+		std::lock_guard<std::recursive_mutex> lock(callback_mutex_);
 		waiters_.push_back(callback);
 	};
 
 	/// Cancel all pending wait operations (synchronous and asynchronous).
 	void cancel() {
-		std::lock_guard<std::mutex> lock(callback_mutex_);
+		std::lock_guard<std::recursive_mutex> lock(callback_mutex_);
 		cancel_before_ = ros::Time::now();
 		waiters_.clear();
 	}
@@ -128,7 +128,7 @@ private:
 		wait_done_        = true;
 
 		{
-			std::lock_guard<std::mutex> lock(callback_mutex_);
+			std::lock_guard<std::recursive_mutex> lock(callback_mutex_);
 			for (unsigned int i = 0; i < waiters_.size(); ++i) {
 				if (waiters_[i](message_, time_)) {
 					waiters_.erase(waiters_.begin() + i);
