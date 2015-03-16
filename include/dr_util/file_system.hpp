@@ -5,4 +5,6 @@ namespace dr {
 
 	bool createDirectory(std::string const & path_string);
 
+	std::string getHomeDirectory();
+
 }

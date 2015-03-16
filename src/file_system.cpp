@@ -30,4 +30,13 @@ bool createDirectory(std::string const & path_string){
 
 }
 
+std::string getHomeDirectory(){
+	const char *homedir;
+	if ((homedir = getenv("HOME")) == NULL){
+		std::cout << "Unable to get home directory as text string. Using working directory instead of home directory." << std::endl;
+		return "./";
+	}
+	return homedir;
+}
+
 }
