@@ -30,6 +30,16 @@ bool createDirectory(std::string const & path_string){
 
 }
 
+bool createParentDirectory(std::string const & filename_string){
+	boost::filesystem::path filename(filename_string);
+
+	// Create the directory if it does not exist.
+	if ( !boost::filesystem::is_directory(filename.parent_path()) )
+		createDirectory(filename.parent_path().c_str());
+
+	return true;
+}
+
 std::string getHomeDirectory(){
 	const char *homedir;
 	if ((homedir = getenv("HOME")) == NULL){
