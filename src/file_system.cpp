@@ -40,6 +40,33 @@ bool createParentDirectory(std::string const & filename_string){
 	return true;
 }
 
+std::vector<std::string> getFilesInDirectoryRecursive(std::string const & directory){
+	std::vector<std::string> files;
+	boost::filesystem::path start_at(directory);
+	boost::filesystem::recursive_directory_iterator iterator(start_at);
+	while(iterator != boost::filesystem::recursive_directory_iterator()){ // Iterate over all directories recursively.
+		if ( boost::filesystem::is_regular_file(iterator->path()) ) // Only return file names, not names of the directories.
+			files.push_back(iterator->path().string());
+		++iterator;
+	}
+	return files;
+}
+
+std::vector<std::string> getFilesInDirectoryRecursive(std::string const & directory, std::string const & suffix){
+	std::vector<std::string> all_files = getFilesInDirectoryRecursive(directory);
+	std::vector<std::string> subset_files;
+	for (size_t i=0; i<all_files.size(); i++){
+		if (hasSuffix(all_files.at(i), suffix)){
+			subset_files.push_back(all_files.at(i));
+		}
+	}
+	return subset_files;
+}
+
+bool hasSuffix(const std::string & string, const std::string & suffix) {
+	return string.size() >= suffix.size() && !string.compare(string.size() - suffix.size(), suffix.size(), suffix);
+}
+
 std::string getHomeDirectory(){
 	const char *homedir;
 	if ((homedir = getenv("HOME")) == NULL){
