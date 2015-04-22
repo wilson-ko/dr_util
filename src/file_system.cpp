@@ -20,11 +20,11 @@ bool createDirectory(std::string const & path_string){
 	}
 
 	// Create directory
-	if (boost::filesystem::create_directory(path)){
+	if (boost::filesystem::create_directory(path)) {
 		std::cout << "Successfully created '" << path_string << "'." << std::endl;
-	}
-	else
+	} else {
 		std::cout << "Unable to create directory '" << path_string << "'." << std::endl;
+	}
 
 	return true;
 
