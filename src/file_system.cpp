@@ -1,3 +1,9 @@
+#include <cstdlib>
+#include <cerrno>
+#include <unistd.h>
+#include <sys/types.h>
+#include <pwd.h>
+
 #include <file_system.hpp>
 #include <boost/filesystem.hpp>
 
@@ -39,13 +45,31 @@ bool hasSuffix(const std::string & string, const std::string & suffix) {
 	return string.size() >= suffix.size() && !string.compare(string.size() - suffix.size(), suffix.size(), suffix);
 }
 
-std::string getHomeDirectory(){
-	const char *homedir;
-	if ((homedir = getenv("HOME")) == NULL){
-		std::cout << "Unable to get home directory as text string. Using working directory instead of home directory." << std::endl;
-		return "./";
+std::string getHomeDirectory(std::string const & fallback) {
+	char const * homedir = std::getenv("HOME");
+	if (homedir) return homedir;
+
+	std::vector<std::uint8_t> buffer(256);
+	uid_t uid = getuid();
+	passwd info;
+	passwd * result;
+
+	while (true) {
+		errno = 0;
+		int error = getpwuid_r(uid, &info, reinterpret_cast<char *>(buffer.data()), buffer.size(), &result);
+
+		if (!error) {
+			return result != nullptr ? info.pw_dir : fallback;
+		} else if (errno != ERANGE) {
+			break;
+		} else if (buffer.size() >= 1024) {
+			break;
+		} else {
+			buffer.resize(buffer.size() * 2);
+		}
 	}
-	return homedir;
+
+	return fallback;
 }
 
 }

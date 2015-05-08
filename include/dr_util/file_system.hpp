@@ -8,7 +8,7 @@ namespace dr {
 
 	bool createParentDirectory(std::string const & filename);
 
-	std::string getHomeDirectory();
+	std::string getHomeDirectory(std::string const & fallback = "./");
 
 	std::vector<std::string> getFilesInDirectoryRecursive(std::string const & directory);
 	std::vector<std::string> getFilesInDirectoryRecursive(std::string const & directory, std::string const & suffix);
