@@ -4,9 +4,9 @@
 
 namespace dr {
 
-	bool createDirectory(std::string const & path_string);
+	bool createDirectory(std::string const & path);
 
-	bool createParentDirectory(std::string const & filename_string);
+	bool createParentDirectory(std::string const & filename);
 
 	std::string getHomeDirectory();
 
