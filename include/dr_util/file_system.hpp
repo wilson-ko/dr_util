@@ -13,20 +13,32 @@ namespace dr {
 	std::vector<std::string> getFilesInDirectoryRecursive(std::string const & directory);
 	std::vector<std::string> getFilesInDirectoryRecursive(std::string const & directory, std::string const & suffix);
 
-	/// Gets a list of all file names from a given directory.
+	/**
+	 * Gets a list of all file names from a given directory.
+	 * Be aware that this function does not use boost file system, but dirent.h
+	 * This function is therefore deprecated.
+	 */
 	void getFilesInDirectory(
 		const std::string & directory,              ///< Input directory path
 		std::vector<std::string> & file_names       ///< Vector of filenames contained in the directory
 	);
 
-	/// Gets a list of all file names from a given directory.
+	/**
+	 * Gets a list of all file names from a given directory.
+	 * Be aware that this function does not use boost file system, but dirent.h
+	 * This function is therefore deprecated.
+	 */
 	void getFilesInDirectory(
 		const std::string & directory,
 		std::vector<std::string> & file_names,
 		std::string suffix
 	);
 
-	/// Gets a list of all file names from a given directory.
+	/**
+	 * Gets a list of all file names from a given directory.
+	 * Be aware that this function does not use boost file system, but dirent.h
+	 * This function is therefore deprecated.
+	 */
 	std::vector<std::string> getFilesInDirectory(
 		const std::string & directory,
 		std::string suffix
