@@ -20,6 +20,7 @@ dr_include_directories(
 add_library(${PROJECT_NAME}
 	src/signal.cpp
 	src/file_system.cpp
+	src/timestamp.cpp
 )
 
 target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES})
