@@ -42,38 +42,6 @@ std::vector<std::string> getFilesInDirectoryRecursive(std::string const & direct
 	return subset_files;
 }
 
-void getFilesInDirectory(const std::string & directory, std::vector<std::string> & file_names) {
-	file_names.clear();
-	DIR * dir;
-	const char * c = directory.c_str();
-	dir = opendir(c);
-	dirent * pdir;
-	while ((pdir = readdir(dir))) {
-		file_names.push_back(pdir->d_name);
-	}
-	closedir(dir);
-	std::sort(file_names.begin(), file_names.end());
-}
-
-void getFilesInDirectory(
-	const std::string & directory, std::vector<std::string> & file_names, std::string suffix
-) {
-	file_names.clear();
-	std::vector<std::string> all_file_names;
-	getFilesInDirectory(directory, all_file_names);
-	for (size_t i = 0; i < all_file_names.size(); i++) {
-			if (hasSuffix(all_file_names.at(i), suffix)) {
-				file_names.push_back(all_file_names.at(i));
-			}
-	}
-}
-
-std::vector<std::string> getFilesInDirectory(const std::string & directory, std::string suffix) {
-	std::vector<std::string> file_names;
-	getFilesInDirectory(directory, file_names, suffix);
-	return file_names;
-}
-
 bool hasSuffix(const std::string & string, const std::string & suffix) {
 	return string.size() >= suffix.size() && !string.compare(string.size() - suffix.size(), suffix.size(), suffix);
 }
