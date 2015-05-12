@@ -11,6 +11,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
 	INCLUDE_DIRS include
 	LIBRARIES ${PROJECT_NAME}
+	CATKIN_DEPENDS dr_log
 )
 
 dr_include_directories(
@@ -20,6 +21,7 @@ dr_include_directories(
 
 add_library(${PROJECT_NAME}
 	src/file_system.cpp
+	src/node.cpp
 	src/signal.cpp
 	src/timestamp.cpp
 )

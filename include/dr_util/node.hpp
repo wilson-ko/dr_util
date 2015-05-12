@@ -104,12 +104,19 @@ std::array<T, N> getParamArray(
 
 /// A ROS node wrapper with some utility functions.
 class Node {
+public:
+	/// Construct a node.
+	Node();
+
 protected:
 	/// The ROS node handle.
 	ros::NodeHandle node_handle_;
 
-	/// Construct the node.
-	Node() : node_handle_("~") {};
+	/// Run prefix for saving log files and logged data.
+	std::string run_prefix_;
+
+	/// Run prefix for saving log files and logged data.
+	std::string node_prefix_;
 
 	/// Get a parameter from the ROS parameter server.
 	/**
@@ -145,6 +152,14 @@ protected:
 	template<typename T>
 	std::vector<T> getParamList(std::string const & name, T const & fallback) {
 		return dr::getParamList<T>(node_handle_, name, fallback);
+	}
+
+	/// Search for a parameter up the namespace hierarchy and return it's value.
+	template<typename T>
+	T searchParam(std::string const & name, T const & fallback) {
+		std::string key;
+		if (!node_handle_.searchParam(name, key)) return fallback;
+		return getParam<T>(key, fallback);
 	}
 
 	/// Dispatch a callback for later invocation.
