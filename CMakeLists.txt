@@ -2,7 +2,8 @@ cmake_minimum_required(VERSION 2.8.3)
 project(dr_util)
 
 find_package(catkin REQUIRED COMPONENTS
-	dr_cmake
+	dr_base
+	dr_log
 	roscpp
 	tf
 )
@@ -18,8 +19,8 @@ dr_include_directories(
 )
 
 add_library(${PROJECT_NAME}
-	src/signal.cpp
 	src/file_system.cpp
+	src/signal.cpp
 	src/timestamp.cpp
 )
 
