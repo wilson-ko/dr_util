@@ -6,6 +6,7 @@
 #include <mutex>
 
 #include <ros/ros.h>
+#include <dr_log/dr_log.hpp>
 
 namespace dr {
 
@@ -72,9 +73,9 @@ public:
 	/// Get the last message received.
 	Message const & message() const {
 		if(!message_received_)
-			ROS_ERROR("No messages has been received to the topic %s, but the message is requested.",topic_name_.c_str());
+			DR_ERROR("No messages has been received, but the message is requested (topic: " << topic_name_ << ")");
 		if(topic_name_ == "")
-			ROS_ERROR("Subscriber not initialized, but the message is requested.");
+			DR_ERROR("Subscriber not initialized, but the message is requested.");
 		return message_;
 	}
 

@@ -5,7 +5,7 @@
 #include <utility>
 
 #include <ros/ros.h>
-#include <ros/console.h>
+#include <dr_log/dr_log.hpp>
 
 #include "dispatch.hpp"
 
@@ -41,7 +41,7 @@ T getParam(
 
 	if (!node.getParam(name, value)) {
 		if (warn) {
-			ROS_WARN_STREAM("Failed to get parameter `" << name << "' (" << node.resolveName(name) << "). Using the default value.");
+			DR_WARN("Failed to get parameter `" << name << "' (" << node.resolveName(name) << "). Using the default value.");
 		}
 		return fallback;
 	}
@@ -93,7 +93,7 @@ std::array<T, N> getParamArray(
 ) {
 	std::vector<T> value;
 	if (!node.getParam(name, value)) {
-		if (warn) ROS_WARN_STREAM("Failed to get parameter `" << name << "' (" << node.resolveName(name) << "). Using the default value.");
+		if (warn) DR_WARN("Failed to get parameter `" << name << "' (" << node.resolveName(name) << "). Using the default value.");
 		return fallback;
 	}
 	if (value.size() != N) throw std::runtime_error("Wrong number of elements in parameter `" + name + "' (" + node.resolveName(name) + ").");

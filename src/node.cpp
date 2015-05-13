@@ -2,7 +2,6 @@
 #include "file_system.hpp"
 
 #include <boost/algorithm/string.hpp>
-#include <dr_log/dr_log.hpp>
 
 namespace dr {
 

@@ -3,6 +3,7 @@
 #include <string>
 
 #include <ros/ros.h>
+#include <dr_log/dr_log.hpp>
 
 namespace dr {
 
@@ -59,14 +60,14 @@ public:
 	 */
 	bool reconnect(ros::Duration const & timeout = ros::Duration(-1), bool verbose = true) {
 		if (client_.isValid()) return true;
-		if (verbose) ROS_WARN_STREAM("Lost connection to service `" + name_ + "'. Reconnecting.");
+		if (verbose) DR_WARN("Lost connection to service `" + name_ + "'. Reconnecting.");
 		client_ = node_->serviceClient<Request, Response>(name_, true);
 		return wait(timeout, verbose);
 	}
 
 	/// Wait for the service to connect.
 	bool wait(ros::Duration const & timeout = ros::Duration(-1), bool verbose = true) {
-		if (verbose) ROS_INFO_STREAM("Waiting for service `" << name_ << "'.");
+		if (verbose) DR_INFO("Waiting for service `" << name_ << "'.");
 		return client_.waitForExistence(timeout);
 	}
 

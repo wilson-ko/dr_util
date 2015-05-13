@@ -1,6 +1,7 @@
 #include <ros/ros.h>
 #include <tf/transform_listener.h>
 #include <fstream>
+#include <dr_log/dr_log.hpp>
 
 
 int main(int argc, char** argv){
@@ -18,7 +19,7 @@ int main(int argc, char** argv){
 		listener.lookupTransform("ur_base_link", "ur_ee_link", ros::Time(0), transform);
 	}
 	catch (tf::TransformException ex){
-		ROS_ERROR("The transform between /ur_base_link and /ur_ee_link cannot be obtained: %s",ex.what());
+		DR_ERROR("The transform between /ur_base_link and /ur_ee_link cannot be obtained: " << ex.what());
 		return false;
 	}
 
@@ -36,6 +37,6 @@ int main(int argc, char** argv){
 	// close the opened file.
 	outfile.close();
 
-	ROS_INFO("The robot position is recorded.");
+	DR_INFO("The robot position is recorded.");
 	return 0;
 }
