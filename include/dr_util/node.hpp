@@ -104,10 +104,6 @@ std::array<T, N> getParamArray(
 
 /// A ROS node wrapper with some utility functions.
 class Node {
-public:
-	/// Construct a node.
-	Node();
-
 protected:
 	/// The ROS node handle.
 	ros::NodeHandle node_handle_;
@@ -115,9 +111,20 @@ protected:
 	/// Run prefix for saving log files and logged data.
 	std::string run_prefix_;
 
-	/// Run prefix for saving log files and logged data.
+	/// Node prefix for saving log files and logged data.
 	std::string node_prefix_;
 
+public:
+	/// Construct a node.
+	Node();
+
+	/// Get the run prefix for saving log files and logged data.
+	std::string runPrefix();
+
+	/// Get the node prefix for saving log files and logged data.
+	std::string nodePrefix();
+
+protected:
 	/// Get a parameter from the ROS parameter server.
 	/**
 	 * If the parameter doesn't exist on the parameter server, an exception is thrown.

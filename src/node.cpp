@@ -25,4 +25,12 @@ Node::Node() : node_handle_("~") {
 	setupLogging(log_file, node_name);
 };
 
+std::string Node::runPrefix() {
+	return run_prefix_;
+}
+
+std::string Node::nodePrefix() {
+	return node_prefix_;
+}
+
 }
