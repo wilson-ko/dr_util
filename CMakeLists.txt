@@ -34,6 +34,7 @@ target_link_libraries(record_robot_position ${catkin_LIBRARIES})
 catkin_add_gtest(${PROJECT_NAME}_functional_test       test/functional.cpp)
 catkin_add_gtest(${PROJECT_NAME}_integer_sequence_test test/integer_sequence.cpp)
 catkin_add_gtest(${PROJECT_NAME}_tuple_test            test/tuple.cpp)
+catkin_add_gtest(${PROJECT_NAME}_bitwise_test          test/bitwise.cpp)
 
 install(DIRECTORY include/${PROJECT_NAME}/
 	DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
