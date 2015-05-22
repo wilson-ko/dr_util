@@ -16,7 +16,8 @@ protected:
 
 public:
 	/// Construct a button filter.
-	ButtonFilter(bool always_high = false, bool always_low = false) : always_high(always_high), always_low(always_low) {}
+	ButtonFilter(bool always_high = false, bool always_low = false) :
+		old_state(false), always_high(always_high), always_low(always_low) {}
 
 	/// Put the signal through the filter.
 	/**
@@ -27,7 +28,7 @@ public:
 		this->old_state = state;
 
 		// If always high is set, high signals should always pass through.
-		if (always_high &&  state) return true;
+		if (always_high && state) return true;
 
 		// If always low is set, low signals should always pass through.
 		if (always_low && !state) return true;
