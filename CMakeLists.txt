@@ -36,6 +36,7 @@ catkin_add_gtest(${PROJECT_NAME}_integer_sequence_test test/integer_sequence.cpp
 catkin_add_gtest(${PROJECT_NAME}_tuple_test            test/tuple.cpp)
 catkin_add_gtest(${PROJECT_NAME}_bitwise_test          test/bitwise.cpp)
 catkin_add_gtest(${PROJECT_NAME}_button_filter_test    test/button_filter.cpp)
+catkin_add_gtest(${PROJECT_NAME}_geometry_test         test/geometry.cpp)
 
 install(DIRECTORY include/${PROJECT_NAME}/
 	DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
