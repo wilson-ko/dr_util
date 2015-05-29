@@ -1,6 +1,6 @@
-#include <ros/ros.h>
+#include "xmlrpc.hpp"
 
-#include <vector> 
+#include <vector>
 #include <tuple>
 
 namespace dr {
@@ -32,7 +32,16 @@ public:
 
 };
 
-/// Load a polynomial from the parameter server.
-bool getParam(std::string const & key, Polynomial & result);
+/// Convert an XmlRpc value to a polynomial.
+template<>
+struct ConvertXmlRpc<Polynomial::Term> {
+	static Polynomial::Term convert(XmlRpc::XmlRpcValue const & value);
+};
+
+/// Convert an XmlRpc value to a polynomial.
+template<>
+struct ConvertXmlRpc<Polynomial> {
+	static Polynomial convert(XmlRpc::XmlRpcValue const & value);
+};
 
 }

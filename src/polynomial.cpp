@@ -3,70 +3,10 @@
 #include <XmlRpcValue.h>
 
 #include <cmath>
+#include <string>
+#include <stdexcept>
 
 namespace dr {
-
-namespace {
-	/// Convert an XmlRpcValue to a double.
-	/**
-	 * \return True on success or false on failure.
-	 */
-	bool fromXmlRpc(
-		XmlRpc::XmlRpcValue const & value, ///< XmlRpc value to convert.
-		double & output                    ///<[out] Set to the converted value on success. Not modified on failure.
-	) {
-		if (value.getType() == XmlRpc::XmlRpcValue::TypeDouble) {
-			output = XmlRpc::XmlRpcValue(value);
-			return true;
-		} else if (value.getType() == XmlRpc::XmlRpcValue::TypeInt) {
-			output = int(XmlRpc::XmlRpcValue(value));
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	/// Convert an XmlRpcValue to a polynomial term.
-	/**
-	 * \return True on success or false on failure.
-	 */
-	bool fromXmlRpc(
-		XmlRpc::XmlRpcValue const & value, ///< XmlRpc value to convert.
-		Polynomial::Term & output          ///<[out] Set to the converted value on success. Not modified on failure.
-	) {
-		if (value.getType() != XmlRpc::XmlRpcValue::Type::TypeArray) return false;
-		if (value.size() != 2) return false;
-
-		Polynomial::Term result;
-		if (!fromXmlRpc(value[0], result.coefficient())) return false;
-		if (!fromXmlRpc(value[1], result.exponent())) return false;
-
-		output = result;
-		return true;
-	}
-
-	/// Convert an XmlRpcValue to a polynomial.
-	/**
-	 * \return True on success or false on failure.
-	 */
-	bool fromXmlRpc(
-		XmlRpc::XmlRpcValue const & value, ///< XmlRpc value to convert.
-		Polynomial & output                ///<[out] Set to the converted value on success. Not modified on failure.
-	) {
-		if (value.getType() != XmlRpc::XmlRpcValue::Type::TypeArray) return false;
-
-		Polynomial result;
-		for (int i = 0; i < value.size(); ++i) {
-			Polynomial::Term term;
-			if (!fromXmlRpc(value[i], term)) return false;
-			result.terms.push_back(term);
-		}
-
-		output = result;
-		return true;
-	}
-
-}
 
 double Polynomial::Term::y(double x) const noexcept {
 	return coefficient() * std::pow(x, exponent());
@@ -89,10 +29,22 @@ Polynomial Polynomial::derivative() const {
 	return derived;
 }
 
-bool getParam(std::string const & key, Polynomial & result) {
-	XmlRpc::XmlRpcValue value;
-	if (!ros::param::get(key, value)) return false;
-	return fromXmlRpc(value, result);
+Polynomial::Term ConvertXmlRpc<Polynomial::Term>::convert(XmlRpc::XmlRpcValue const & value) {
+	if (value.getType() != XmlRpc::XmlRpcValue::Type::TypeArray) throw std::runtime_error("Cannot convert XmlRpc type " + xmlRpcTypeName(value.getType()) + " to polynomial term.");
+	if (value.size() != 2) throw std::runtime_error("Wrong number of elements for polynomial term: " + std::to_string(value.size()) + " (expected 2).");
+
+	return Polynomial::Term(ConvertXmlRpc<double>::convert(value[0]), ConvertXmlRpc<double>::convert(value));
+}
+
+Polynomial ConvertXmlRpc<Polynomial>::convert(XmlRpc::XmlRpcValue const & value) {
+	if (value.getType() != XmlRpc::XmlRpcValue::Type::TypeArray) throw std::runtime_error("Cannot convert XmlRpc type " + xmlRpcTypeName(value.getType()) + " to polynomial.");
+
+	Polynomial result;
+	for (int i = 0; i < value.size(); ++i) {
+		result.terms.push_back(ConvertXmlRpc<Polynomial::Term>::convert(value[i]));
+	}
+
+	return result;
 }
 
 }
