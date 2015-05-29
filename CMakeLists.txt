@@ -25,6 +25,7 @@ add_library(${PROJECT_NAME}
 	src/signal.cpp
 	src/timestamp.cpp
 	src/polynomial.cpp
+	src/xmlrpc.cpp
 )
 
 target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES})

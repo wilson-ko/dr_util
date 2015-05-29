@@ -8,6 +8,7 @@
 #include <dr_log/dr_log.hpp>
 
 #include "dispatch.hpp"
+#include "param.hpp"
 
 
 namespace dr {
@@ -16,38 +17,6 @@ namespace dr {
 template<typename Service>
 using ServiceEvent = ros::ServiceEvent<typename Service::Request, typename Service::Response>;
 
-/// Get a parameter from the ROS parameter server.
-template<typename T>
-T getParam(
-	ros::NodeHandle const & node, ///< The node handle to use for parameter name resolution.
-	std::string const & name      ///< The parameter to retrieve.
-) {
-	T value;
-	if (!node.getParam(name, value)) {
-		throw std::runtime_error(std::string("Failed to get parameter `") + name + "' (" + node.resolveName(name) + ").");
-	}
-	return value;
-}
-
-/// Get a parameter from the ROS parameter server.
-template<typename T>
-T getParam(
-	ros::NodeHandle const & node, ///< The node handle to use for parameter name resolution.
-	std::string const & name,     ///< The parameter to retrieve.
-	T const & fallback,           ///< The fallback value to return if the parameter is not found.
-	bool warn = true              ///< If true, log a warning when the parameter was not found.
-) {
-	T value;
-
-	if (!node.getParam(name, value)) {
-		if (warn) {
-			DR_WARN("Failed to get parameter `" << name << "' (" << node.resolveName(name) << "). Using the default value.");
-		}
-		return fallback;
-	}
-
-	return value;
-}
 
 /// Get a vector from the ROS parameter server.
 template<typename T>
