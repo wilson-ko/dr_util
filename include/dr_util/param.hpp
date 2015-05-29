@@ -1,3 +1,5 @@
+#pragma once
+
 #include "xmlrpc.hpp"
 
 #include <dr_log/dr_log.hpp>

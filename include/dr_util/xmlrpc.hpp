@@ -1,3 +1,5 @@
+#pragma once
+
 #include <XmlRpcValue.h>
 
 #include <string>
