@@ -24,6 +24,7 @@ add_library(${PROJECT_NAME}
 	src/node.cpp
 	src/signal.cpp
 	src/timestamp.cpp
+	src/polynomial.cpp
 )
 
 target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES})
@@ -37,6 +38,9 @@ catkin_add_gtest(${PROJECT_NAME}_tuple_test            test/tuple.cpp)
 catkin_add_gtest(${PROJECT_NAME}_bitwise_test          test/bitwise.cpp)
 catkin_add_gtest(${PROJECT_NAME}_button_filter_test    test/button_filter.cpp)
 catkin_add_gtest(${PROJECT_NAME}_geometry_test         test/geometry.cpp)
+catkin_add_gtest(${PROJECT_NAME}_polynomial_test       test/polynomial.cpp)
+
+target_link_libraries(${PROJECT_NAME}_polynomial_test ${PROJECT_NAME})
 
 install(DIRECTORY include/${PROJECT_NAME}/
 	DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
