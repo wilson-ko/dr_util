@@ -97,12 +97,8 @@ struct ConvertXmlRpc<std::map<std::string, T>> {
 	static std::map<std::string, T> convert(XmlRpc::XmlRpcValue const & value) {
 		if (value.getType() != XmlRpc::XmlRpcValue::TypeStruct) throw std::runtime_error("Cannot convert XmlRpc type " + xmlRpcTypeName(value.getType()) + " to a map.");
 
-		// Very ugly hack to work around missing const access to map.
-		// TODO: Remove once ROS updates to newer XmpRpc++ with const accessors.
-		XmlRpc::XmlRpcValue & ugly_hack = const_cast<XmlRpc::XmlRpcValue &>(value);
-
 		std::map<std::string, T> result;
-		for (XmlRpc::XmlRpcValue::ValueStruct::const_iterator i = ugly_hack.begin(); i != ugly_hack.end(); ++i) {
+		for (XmlRpc::XmlRpcValue::ValueStruct::const_iterator i = xmlRpcBegin(value); i != xmlRpcEnd(value); ++i) {
 			result.insert({i->first, fromXmlRpc<T>(i->second)});
 		}
 
