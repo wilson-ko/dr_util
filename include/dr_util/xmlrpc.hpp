@@ -7,7 +7,32 @@
 
 namespace dr {
 
+/// Access an XmlRpc value as a boolean.
+bool xmlRpcAsBool(XmlRpc::XmlRpcValue const & value);
+
+/// Access an XmlRpc value as an int.
+int xmlRpcAsInt(XmlRpc::XmlRpcValue const & value);
+
+/// Access an XmlRpc value as a double.
+double xmlRpcAsDouble(XmlRpc::XmlRpcValue const & value);
+
+/// Access an XmlRpc value as a string.
+std::string const & xmlRpcAsString(XmlRpc::XmlRpcValue const & value);
+
+/// Get a member of an XmlRpcValue struct.
+XmlRpc::XmlRpcValue const & xmlRpcAt(XmlRpc::XmlRpcValue const & value, std::string const & key);
+
+/// Get an iterator to the first member of an XmlRpcValue struct.
+XmlRpc::XmlRpcValue::ValueStruct::const_iterator xmlRpcBegin(XmlRpc::XmlRpcValue const & value);
+
+/// Get an end iterator for the members of an XmlRpcValue struct.
+XmlRpc::XmlRpcValue::ValueStruct::const_iterator xmlRpcEnd(XmlRpc::XmlRpcValue const & value);
+
+/// Convert an XmlRpcValue::Type to a string.
 std::string xmlRpcTypeName(XmlRpc::XmlRpcValue::Type type);
+
+/// Make a runtime error for an unsupported XmlRpcValue::Type.
+std::runtime_error makeXmlRpcValueTypeError(XmlRpc::XmlRpcValue::Type type, std::string const & target_type);
 
 /// Struct to convert an XmlRpc value to a T.
 /**

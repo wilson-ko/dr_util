@@ -2,6 +2,42 @@
 
 namespace dr {
 
+bool xmlRpcAsBool(XmlRpc::XmlRpcValue const & value) {
+	// TODO: Ugly hack to circomvent lack of const accessors.
+	return const_cast<XmlRpc::XmlRpcValue &>(value);
+}
+
+int xmlRpcAsInt(XmlRpc::XmlRpcValue const & value) {
+	// TODO: Ugly hack to circomvent lack of const accessors.
+	return const_cast<XmlRpc::XmlRpcValue &>(value);
+}
+
+double xmlRpcAsDouble(XmlRpc::XmlRpcValue const & value) {
+	// TODO: Ugly hack to circomvent lack of const accessors.
+	return const_cast<XmlRpc::XmlRpcValue &>(value);
+}
+
+std::string const & xmlRpcAsString(XmlRpc::XmlRpcValue const & value) {
+	// TODO: Ugly hack to circomvent lack of const accessors.
+	return const_cast<XmlRpc::XmlRpcValue &>(value);
+}
+
+XmlRpc::XmlRpcValue const & xmlRpcAt(XmlRpc::XmlRpcValue const & value, std::string const & key) {
+	// TODO: Ugly hack to circomvent lack of const accessors.
+	if (!value.hasMember(key)) throw std::runtime_error("key `" + key + "' not found");
+	return const_cast<XmlRpc::XmlRpcValue &>(value)[key];
+}
+
+XmlRpc::XmlRpcValue::ValueStruct::const_iterator xmlRpcBegin(XmlRpc::XmlRpcValue const & value) {
+	// TODO: Ugly hack to circomvent lack of const accessors.
+	return const_cast<XmlRpc::XmlRpcValue &>(value).begin();
+}
+
+XmlRpc::XmlRpcValue::ValueStruct::const_iterator xmlRpcEnd(XmlRpc::XmlRpcValue const & value) {
+	// TODO: Ugly hack to circomvent lack of const accessors.
+	return const_cast<XmlRpc::XmlRpcValue &>(value).end();
+}
+
 std::string xmlRpcTypeName(XmlRpc::XmlRpcValue::Type type) {
 	switch (type) {
 		case XmlRpc::XmlRpcValue::TypeArray:    return "array";
@@ -17,6 +53,11 @@ std::string xmlRpcTypeName(XmlRpc::XmlRpcValue::Type type) {
 
 	return "unknown (" + std::to_string(type) + ")";
 }
+
+std::runtime_error makeXmlRpcValueTypeError(XmlRpc::XmlRpcValue::Type type, std::string const & target_type) {
+	return std::runtime_error("Cannot convert XmlRpc type " + xmlRpcTypeName(type) + " to " + target_type + ".");
+}
+
 
 bool ConvertXmlRpc<bool>::convert(XmlRpc::XmlRpcValue const & value) {
 	if (value.getType() == XmlRpc::XmlRpcValue::TypeBoolean) return bool(XmlRpc::XmlRpcValue(value));

@@ -83,7 +83,6 @@ T getParam(
 	} catch (...) {
 		std::throw_with_nested(std::runtime_error("Failed to load parameter `" + key + "'"));
 	}
-
 }
 
 template<typename T>
