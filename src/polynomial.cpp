@@ -29,6 +29,15 @@ Polynomial Polynomial::derivative() const {
 	return derived;
 }
 
+std::ostream & operator<< (std::ostream & stream, Polynomial const & polynomial) {
+	for (Polynomial::Term const & term : polynomial.terms) {
+		stream << term.coefficient() << "x" << "^" << term.exponent();
+		if (&term != &polynomial.terms.back()) stream << " + ";
+	}
+
+	return stream;
+}
+
 Polynomial::Term ConvertXmlRpc<Polynomial::Term>::convert(XmlRpc::XmlRpcValue const & value) {
 	if (value.getType() != XmlRpc::XmlRpcValue::Type::TypeArray) throw std::runtime_error("Cannot convert XmlRpc type " + xmlRpcTypeName(value.getType()) + " to polynomial term.");
 	if (value.size() != 2) throw std::runtime_error("Wrong number of elements for polynomial term: " + std::to_string(value.size()) + " (expected 2).");

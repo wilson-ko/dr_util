@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <tuple>
+#include <ostream>
 
 namespace dr {
 
@@ -29,8 +30,10 @@ public:
 
 	/// Calculate the derivative of a polynomial.
 	Polynomial derivative() const;
-
 };
+
+/// Output a polynomial to an ostream.
+std::ostream & operator<< (std::ostream & stream, Polynomial const & polynomial);
 
 /// Convert an XmlRpc value to a polynomial.
 template<>
