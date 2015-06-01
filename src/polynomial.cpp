@@ -42,7 +42,7 @@ Polynomial::Term ConvertXmlRpc<Polynomial::Term>::convert(XmlRpc::XmlRpcValue co
 	if (value.getType() != XmlRpc::XmlRpcValue::Type::TypeArray) throw std::runtime_error("Cannot convert XmlRpc type " + xmlRpcTypeName(value.getType()) + " to polynomial term.");
 	if (value.size() != 2) throw std::runtime_error("Wrong number of elements for polynomial term: " + std::to_string(value.size()) + " (expected 2).");
 
-	return Polynomial::Term(ConvertXmlRpc<double>::convert(value[0]), ConvertXmlRpc<double>::convert(value));
+	return Polynomial::Term(ConvertXmlRpc<double>::convert(value[0]), ConvertXmlRpc<double>::convert(value[1]));
 }
 
 Polynomial ConvertXmlRpc<Polynomial>::convert(XmlRpc::XmlRpcValue const & value) {
