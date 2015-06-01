@@ -26,7 +26,13 @@ bool loadParam(
 ) {
 	XmlRpc::XmlRpcValue value;
 	if (!ros::param::get(key, value)) return false;
-	result = ConvertXmlRpc<T>::convert(value);
+	try {
+		result = ConvertXmlRpc<T>::convert(value);
+	} catch(std::exception const & e) {
+		std::throw_with_nested(std::runtime_error("Failed to load parameter `" + key + "': " + e.what()));
+	} catch (...) {
+		std::throw_with_nested(std::runtime_error("Failed to load parameter `" + key + "'"));
+	}
 }
 
 /// Get a parameter from the ROS parameter service.
@@ -42,7 +48,13 @@ T getParam(
 ) {
 	XmlRpc::XmlRpcValue value;
 	if (!ros::param::get(key, value)) throw std::runtime_error("ROS parameter not found: " + key);
-	return ConvertXmlRpc<T>::convert(value);
+	try {
+		return ConvertXmlRpc<T>::convert(value);
+	} catch(std::exception const & e) {
+		std::throw_with_nested(std::runtime_error("Failed to load parameter `" + key + "': " + e.what()));
+	} catch (...) {
+		std::throw_with_nested(std::runtime_error("Failed to load parameter `" + key + "'"));
+	}
 }
 
 /// Get a parameter from the ROS parameter service or a fallback value.
@@ -64,7 +76,14 @@ T getParam(
 		return fallback;
 	}
 
-	return ConvertXmlRpc<T>::convert(value);
+	try {
+		return ConvertXmlRpc<T>::convert(value);
+	} catch(std::exception const & e) {
+		std::throw_with_nested(std::runtime_error("Failed to load parameter `" + key + "': " + e.what()));
+	} catch (...) {
+		std::throw_with_nested(std::runtime_error("Failed to load parameter `" + key + "'"));
+	}
+
 }
 
 template<typename T>
