@@ -85,7 +85,7 @@ struct ConvertXmlRpc<std::vector<T>> {
 
 		std::vector<T> result;
 		for (int i = 0; i < value.size(); ++i) {
-			result.push_back(ConvertXmlRpc<T>::convert(value));
+			result.push_back(ConvertXmlRpc<T>::convert(value[i]));
 		}
 
 		return result;
