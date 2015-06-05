@@ -33,15 +33,17 @@ target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES})
 add_executable(record_robot_position src/record_robot_position.cpp)
 target_link_libraries(record_robot_position ${catkin_LIBRARIES})
 
-catkin_add_gtest(${PROJECT_NAME}_functional_test       test/functional.cpp)
-catkin_add_gtest(${PROJECT_NAME}_integer_sequence_test test/integer_sequence.cpp)
-catkin_add_gtest(${PROJECT_NAME}_tuple_test            test/tuple.cpp)
-catkin_add_gtest(${PROJECT_NAME}_bitwise_test          test/bitwise.cpp)
-catkin_add_gtest(${PROJECT_NAME}_button_filter_test    test/button_filter.cpp)
-catkin_add_gtest(${PROJECT_NAME}_geometry_test         test/geometry.cpp)
-catkin_add_gtest(${PROJECT_NAME}_polynomial_test       test/polynomial.cpp)
+catkin_add_gtest(${PROJECT_NAME}_test_functional       test/functional.cpp)
+catkin_add_gtest(${PROJECT_NAME}_test_integer_sequence test/integer_sequence.cpp)
+catkin_add_gtest(${PROJECT_NAME}_test_tuple            test/tuple.cpp)
+catkin_add_gtest(${PROJECT_NAME}_test_bitwise          test/bitwise.cpp)
+catkin_add_gtest(${PROJECT_NAME}_test_button_filter    test/button_filter.cpp)
+catkin_add_gtest(${PROJECT_NAME}_test_geometry         test/geometry.cpp)
+catkin_add_gtest(${PROJECT_NAME}_test_polynomial       test/polynomial.cpp)
+catkin_add_gtest(${PROJECT_NAME}_test_xmlrpc           test/xmlrpc.cpp)
 
-target_link_libraries(${PROJECT_NAME}_polynomial_test ${PROJECT_NAME})
+target_link_libraries(${PROJECT_NAME}_test_polynomial ${PROJECT_NAME})
+target_link_libraries(${PROJECT_NAME}_test_xmlrpc     ${PROJECT_NAME})
 
 install(DIRECTORY include/${PROJECT_NAME}/
 	DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
