@@ -27,7 +27,7 @@ bool loadParam(
 	XmlRpc::XmlRpcValue value;
 	if (!ros::param::get(key, value)) return false;
 	try {
-		result = ConvertXmlRpc<T>::convert(value);
+		result = fromXmlRpc<T>(value);
 	} catch(std::exception const & e) {
 		std::throw_with_nested(std::runtime_error("Failed to load parameter `" + key + "': " + e.what()));
 	} catch (...) {
@@ -49,7 +49,7 @@ T getParam(
 	XmlRpc::XmlRpcValue value;
 	if (!ros::param::get(key, value)) throw std::runtime_error("ROS parameter not found: " + key);
 	try {
-		return ConvertXmlRpc<T>::convert(value);
+		return fromXmlRpc<T>(value);
 	} catch(std::exception const & e) {
 		std::throw_with_nested(std::runtime_error("Failed to load parameter `" + key + "': " + e.what()));
 	} catch (...) {
@@ -77,7 +77,7 @@ T getParam(
 	}
 
 	try {
-		return ConvertXmlRpc<T>::convert(value);
+		return fromXmlRpc<T>(value);
 	} catch(std::exception const & e) {
 		std::throw_with_nested(std::runtime_error("Failed to load parameter `" + key + "': " + e.what()));
 	} catch (...) {
