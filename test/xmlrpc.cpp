@@ -149,4 +149,41 @@ TEST(XmlrpcTest, convertMapInvalid) {
 	ASSERT_THROW((fromXmlRpc<std::map<std::string, std::string>>(val)), std::exception);
 }
 
+TEST(XmlrpcTest, convertArrayInt) {
+	XmlRpc::XmlRpcValue val;
+	val[0] = 7;
+	val[1] = 4;
+	val[2] = 1;
+
+	ASSERT_EQ((std::array<int, 3>{{7, 4, 1}}), (fromXmlRpc<std::array<int, 3>>(val)));
+}
+
+TEST(XmlrpcTest, convertArrayString) {
+	XmlRpc::XmlRpcValue val;
+	val[0] = "klaatu";
+	val[1] = "barada";
+	val[2] = "nikto";
+
+	ASSERT_EQ((std::array<std::string, 3>{{"klaatu", "barada", "nikto"}}), (fromXmlRpc<std::array<std::string, 3>>(val)));
+}
+
+TEST(XmlrpcTest, convertArrayInvalidType) {
+	XmlRpc::XmlRpcValue val;
+	val[0] = 7;
+	val[1] = 4;
+	val[2] = 1;
+
+	ASSERT_THROW((fromXmlRpc<std::array<std::string, 3>>(val)), std::exception);
+}
+
+TEST(XmlrpcTest, convertArrayInvalidSize) {
+	XmlRpc::XmlRpcValue val;
+	val[0] = 7;
+	val[1] = 4;
+	val[2] = 1;
+
+	ASSERT_THROW((fromXmlRpc<std::array<int, 2>>(val)), std::exception);
+	ASSERT_THROW((fromXmlRpc<std::array<int, 4>>(val)), std::exception);
+}
+
 }

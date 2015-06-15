@@ -2,6 +2,7 @@
 
 #include <XmlRpcValue.h>
 
+#include <array>
 #include <string>
 #include <vector>
 
@@ -84,7 +85,7 @@ struct ConvertXmlRpc<std::string> {
 template<typename T>
 struct ConvertXmlRpc<std::vector<T>> {
 	static std::vector<T> convert(XmlRpc::XmlRpcValue const & value) {
-		ensureXmlRpcType(value, XmlRpc::XmlRpcValue::TypeArray, "a vector");
+		ensureXmlRpcType(value, XmlRpc::XmlRpcValue::TypeArray, "vector");
 
 		std::vector<T> result;
 		result.reserve(value.size());
@@ -100,12 +101,27 @@ struct ConvertXmlRpc<std::vector<T>> {
 template<typename T>
 struct ConvertXmlRpc<std::map<std::string, T>> {
 	static std::map<std::string, T> convert(XmlRpc::XmlRpcValue const & value) {
-		ensureXmlRpcType(value, XmlRpc::XmlRpcValue::TypeStruct, "a map");
+		ensureXmlRpcType(value, XmlRpc::XmlRpcValue::TypeStruct, "map");
 
 		std::map<std::string, T> result;
 
 		for (XmlRpc::XmlRpcValue::ValueStruct::const_iterator i = xmlRpcBegin(value); i != xmlRpcEnd(value); ++i) {
 			result.insert({i->first, fromXmlRpc<T>(i->second)});
+		}
+
+		return result;
+	}
+};
+
+template<typename T, std::size_t N>
+struct ConvertXmlRpc<std::array<T, N>> {
+	static std::array<T, N> convert(XmlRpc::XmlRpcValue const & value) {
+		ensureXmlRpcType(value, XmlRpc::XmlRpcValue::TypeArray, "array");
+		if (value.size() != N) throw std::runtime_error("Wrong size: " + std::to_string(value.size()) + " (expected " + std::to_string(N) + ")");
+
+		std::array<T, N> result;
+		for (std::size_t i = 0; i < N; ++i) {
+			result[i] = ConvertXmlRpc<T>::convert(value[i]);
 		}
 
 		return result;
