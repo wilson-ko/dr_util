@@ -9,6 +9,33 @@ int main(int argc, char ** argv) {
 
 namespace dr {
 
+TEST(XmlrpcTest, ensureXmlRpcType) {
+	XmlRpc::XmlRpcValue val_bool   = true;
+	XmlRpc::XmlRpcValue val_int    = 0;
+	XmlRpc::XmlRpcValue val_double = 3.14;
+	XmlRpc::XmlRpcValue val_string = "Klaatu barada nikto";
+
+	XmlRpc::XmlRpcValue val_list;
+	val_list[0] = 41;
+
+	XmlRpc::XmlRpcValue val_struct;
+	val_struct["klaatu"] = "barada nikto";
+
+	ASSERT_NO_THROW(ensureXmlRpcType(val_bool, XmlRpc::XmlRpcValue::TypeBoolean, ""));
+	ASSERT_NO_THROW(ensureXmlRpcType(val_int, XmlRpc::XmlRpcValue::TypeInt, ""));
+	ASSERT_NO_THROW(ensureXmlRpcType(val_double, XmlRpc::XmlRpcValue::TypeDouble, ""));
+	ASSERT_NO_THROW(ensureXmlRpcType(val_string, XmlRpc::XmlRpcValue::TypeString, ""));
+	ASSERT_NO_THROW(ensureXmlRpcType(val_list, XmlRpc::XmlRpcValue::TypeArray, ""));
+	ASSERT_NO_THROW(ensureXmlRpcType(val_struct, XmlRpc::XmlRpcValue::TypeStruct, ""));
+
+	ASSERT_THROW(ensureXmlRpcType(val_bool, XmlRpc::XmlRpcValue::TypeInt, ""), std::runtime_error);
+	ASSERT_THROW(ensureXmlRpcType(val_int, XmlRpc::XmlRpcValue::TypeDouble, ""), std::runtime_error);
+	ASSERT_THROW(ensureXmlRpcType(val_double, XmlRpc::XmlRpcValue::TypeString, ""), std::runtime_error);
+	ASSERT_THROW(ensureXmlRpcType(val_string, XmlRpc::XmlRpcValue::TypeArray, ""), std::runtime_error);
+	ASSERT_THROW(ensureXmlRpcType(val_list, XmlRpc::XmlRpcValue::TypeStruct, ""), std::runtime_error);
+	ASSERT_THROW(ensureXmlRpcType(val_struct, XmlRpc::XmlRpcValue::TypeBoolean, ""), std::runtime_error);
+}
+
 TEST(XmlrpcTest, convertBoolean) {
 	XmlRpc::XmlRpcValue val_true   = true;
 	XmlRpc::XmlRpcValue val_false  = false;

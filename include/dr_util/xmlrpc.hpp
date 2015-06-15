@@ -32,7 +32,10 @@ XmlRpc::XmlRpcValue::ValueStruct::const_iterator xmlRpcEnd(XmlRpc::XmlRpcValue c
 std::string xmlRpcTypeName(XmlRpc::XmlRpcValue::Type type);
 
 /// Make a runtime error for an unsupported XmlRpcValue::Type.
-std::runtime_error makeXmlRpcValueTypeError(XmlRpc::XmlRpcValue::Type type, std::string const & target_type);
+std::runtime_error makeXmlRpcTypeError(XmlRpc::XmlRpcValue::Type type, std::string const & target_type);
+
+/// Ensure an XmlRpcValue is the correct type.
+void ensureXmlRpcType(XmlRpc::XmlRpcValue const & value, XmlRpc::XmlRpcValue::Type wanted, std::string const & target_type);
 
 /// Struct to convert an XmlRpc value to a T.
 /**
@@ -81,9 +84,11 @@ struct ConvertXmlRpc<std::string> {
 template<typename T>
 struct ConvertXmlRpc<std::vector<T>> {
 	static std::vector<T> convert(XmlRpc::XmlRpcValue const & value) {
-		if (value.getType() != XmlRpc::XmlRpcValue::TypeArray) throw std::runtime_error("Cannot convert XmlRpc type " + xmlRpcTypeName(value.getType()) + " to a vector.");
+		ensureXmlRpcType(value, XmlRpc::XmlRpcValue::TypeArray, "a vector");
 
 		std::vector<T> result;
+		result.reserve(value.size());
+
 		for (int i = 0; i < value.size(); ++i) {
 			result.push_back(ConvertXmlRpc<T>::convert(value[i]));
 		}
@@ -95,9 +100,10 @@ struct ConvertXmlRpc<std::vector<T>> {
 template<typename T>
 struct ConvertXmlRpc<std::map<std::string, T>> {
 	static std::map<std::string, T> convert(XmlRpc::XmlRpcValue const & value) {
-		if (value.getType() != XmlRpc::XmlRpcValue::TypeStruct) throw std::runtime_error("Cannot convert XmlRpc type " + xmlRpcTypeName(value.getType()) + " to a map.");
+		ensureXmlRpcType(value, XmlRpc::XmlRpcValue::TypeStruct, "a map");
 
 		std::map<std::string, T> result;
+
 		for (XmlRpc::XmlRpcValue::ValueStruct::const_iterator i = xmlRpcBegin(value); i != xmlRpcEnd(value); ++i) {
 			result.insert({i->first, fromXmlRpc<T>(i->second)});
 		}
