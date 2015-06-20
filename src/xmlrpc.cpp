@@ -79,6 +79,12 @@ double ConvertXmlRpc<double>::convert(XmlRpc::XmlRpcValue const & value) {
 	throw makeXmlRpcTypeError(value.getType(), "double");
 }
 
+float ConvertXmlRpc<float>::convert(XmlRpc::XmlRpcValue const & value) {
+	if (value.getType() == XmlRpc::XmlRpcValue::TypeDouble) return double(XmlRpc::XmlRpcValue(value));
+	if (value.getType() == XmlRpc::XmlRpcValue::TypeInt)    return int(XmlRpc::XmlRpcValue(value));
+	throw makeXmlRpcTypeError(value.getType(), "float");
+}
+
 std::string ConvertXmlRpc<std::string>::convert(XmlRpc::XmlRpcValue const & value) {
 	if (value.getType() == XmlRpc::XmlRpcValue::TypeString) return std::string(XmlRpc::XmlRpcValue(value));
 	throw makeXmlRpcTypeError(value.getType(), "string");

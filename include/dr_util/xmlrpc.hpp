@@ -78,6 +78,11 @@ struct ConvertXmlRpc<double> {
 };
 
 template<>
+struct ConvertXmlRpc<float> {
+	static float convert(XmlRpc::XmlRpcValue const & value);
+};
+
+template<>
 struct ConvertXmlRpc<std::string> {
 	static std::string convert(XmlRpc::XmlRpcValue const & value);
 };
