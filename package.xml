@@ -14,5 +14,6 @@
 	<depend>dr_base</depend>
 	<depend>dr_log</depend>
 	<depend>roscpp</depend>
+	<depend>roslib</depend>
 	<depend>tf</depend>
 </package>

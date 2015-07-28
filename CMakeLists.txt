@@ -5,6 +5,7 @@ find_package(catkin REQUIRED COMPONENTS
 	dr_base
 	dr_log
 	roscpp
+	roslib
 	tf
 )
 
@@ -25,6 +26,7 @@ add_library(${PROJECT_NAME}
 	src/signal.cpp
 	src/timestamp.cpp
 	src/polynomial.cpp
+	src/resource.cpp
 	src/xmlrpc.cpp
 )
 
@@ -40,9 +42,11 @@ dr_add_gtest(bitwise          test/bitwise.cpp)
 dr_add_gtest(button_filter    test/button_filter.cpp)
 dr_add_gtest(geometry         test/geometry.cpp)
 dr_add_gtest(polynomial       test/polynomial.cpp)
+dr_add_gtest(resource         test/resource.cpp)
 dr_add_gtest(xmlrpc           test/xmlrpc.cpp)
 
 target_link_libraries(${PROJECT_NAME}_test_polynomial ${PROJECT_NAME})
+target_link_libraries(${PROJECT_NAME}_test_resource   ${PROJECT_NAME} ${catkin_LIBRARIES})
 target_link_libraries(${PROJECT_NAME}_test_xmlrpc     ${PROJECT_NAME})
 
 install(DIRECTORY include/${PROJECT_NAME}/
