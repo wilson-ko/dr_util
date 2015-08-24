@@ -44,12 +44,7 @@ std::array<T, N> getParamArray(
 	ros::NodeHandle const & node,      ///< The node handle to use for parameter name resolution.
 	std::string const & name           ///< The parameter to retrieve.
 ) {
-	std::vector<T> value;
-	if (!node.getParam(name, value)) throw std::runtime_error(std::string("Failed to get parameter `") + name + "' (" + node.resolveName(name) + ").");
-	if (value.size() != N) throw std::runtime_error("Wrong number of elements in parameter `" + name + "' (" + node.resolveName(name) + ").");
-	std::array<T, N> result;
-	std::copy(value.begin(), value.end(), result.begin());
-	return result;
+	return getParam<std::array<T, N>>(node, name);
 }
 
 /// Get an array from the ROS parameter server.
@@ -60,15 +55,7 @@ std::array<T, N> getParamArray(
 	std::array<T, N> const & fallback, ///< The fallback value to return if the parameter is not found.
 	bool warn = false                  ///< If true, log a warning when the parameter was not found.
 ) {
-	std::vector<T> value;
-	if (!node.getParam(name, value)) {
-		if (warn) DR_WARN("Failed to get parameter `" << name << "' (" << node.resolveName(name) << "). Using the default value.");
-		return fallback;
-	}
-	if (value.size() != N) throw std::runtime_error("Wrong number of elements in parameter `" + name + "' (" + node.resolveName(name) + ").");
-	std::array<T, N> result;
-	std::copy(value.begin(), value.end(), result.begin());
-	return result;
+	return getParam<std::array<T, N>>(node, name, fallback, warn);
 }
 
 /// A ROS node wrapper with some utility functions.
