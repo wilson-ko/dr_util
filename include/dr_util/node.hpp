@@ -33,7 +33,7 @@ std::vector<T> getParamList(
 	ros::NodeHandle const & node,    ///< The node handle to use for parameter name resolution.
 	std::string const & name,        ///< The parameter to retrieve.
 	std::vector<T> const & fallback, ///< The fallback value to return if the parameter is not found.
-	bool warn = false                ///< If true, log a warning when the parameter was not found.
+	bool warn = true                 ///< If true, log a warning when the parameter was not found.
 ) {
 	return getParam<std::vector<T>>(node, name, fallback, warn);
 }
@@ -53,7 +53,7 @@ std::array<T, N> getParamArray(
 	ros::NodeHandle const & node,      ///< The node handle to use for parameter name resolution.
 	std::string const & name,          ///< The parameter to retrieve.
 	std::array<T, N> const & fallback, ///< The fallback value to return if the parameter is not found.
-	bool warn = false                  ///< If true, log a warning when the parameter was not found.
+	bool warn = true                   ///< If true, log a warning when the parameter was not found.
 ) {
 	return getParam<std::array<T, N>>(node, name, fallback, warn);
 }
@@ -95,8 +95,8 @@ protected:
 	 * If the parameter doesn't exist on the parameter server, the fallback is returned.
 	 */
 	template<typename T>
-	T getParam(std::string const & name, T const & fallback) {
-		return dr::getParam<T>(node_handle_, name, fallback);
+	T getParam(std::string const & name, T const & fallback, bool warn = true) {
+		return dr::getParam<T>(node_handle_, name, fallback, warn);
 	}
 
 	/// Get a list of parameters from the ROS parameter server.
@@ -113,16 +113,16 @@ protected:
 	 * If the parameters do not exist on the parameter server, the fallback is returned.
 	 */
 	template<typename T>
-	std::vector<T> getParamList(std::string const & name, T const & fallback) {
-		return dr::getParamList<T>(node_handle_, name, fallback);
+	std::vector<T> getParamList(std::string const & name, T const & fallback, bool warn = true) {
+		return dr::getParamList<T>(node_handle_, name, fallback, warn);
 	}
 
 	/// Search for a parameter up the namespace hierarchy and return it's value.
 	template<typename T>
-	T searchParam(std::string const & name, T const & fallback) {
+	T searchParam(std::string const & name, T const & fallback, bool warn = true) {
 		std::string key;
 		if (!node_handle_.searchParam(name, key)) return fallback;
-		return getParam<T>(key, fallback);
+		return getParam<T>(key, fallback, warn);
 	}
 
 	/// Dispatch a callback for later invocation.
