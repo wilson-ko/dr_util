@@ -96,7 +96,7 @@ struct ConvertXmlRpc<std::vector<T>> {
 		result.reserve(value.size());
 
 		for (int i = 0; i < value.size(); ++i) {
-			result.push_back(ConvertXmlRpc<T>::convert(value[i]));
+			result.push_back(fromXmlRpc<T>(value[i]));
 		}
 
 		return result;
@@ -126,7 +126,7 @@ struct ConvertXmlRpc<std::array<T, N>> {
 
 		std::array<T, N> result;
 		for (std::size_t i = 0; i < N; ++i) {
-			result[i] = ConvertXmlRpc<T>::convert(value[i]);
+			result[i] = fromXmlRpc<T>(value[i]);
 		}
 
 		return result;
