@@ -14,7 +14,7 @@ namespace dr {
 
 /// Load a parameter from the ROS parameter service.
 /**
- * Requires dr::ConvertXmlRpc<T> to be specialized for T.
+ * Requires dr::fromXmlRpc<T> or dr::ConvertXmlRpc<T> to be specialized for T.
  *
  * \throws Any exception thrown by dr::fromXmlRpc<T>.
  * \return True if the parameter was found, false otherwise.
@@ -37,7 +37,7 @@ bool loadParam(
 
 /// Get a parameter from the ROS parameter service.
 /**
- * Requires dr::ConvertXmlRpc<T> to be specialized for T.
+ * Requires dr::fromXmlRpc<T> or dr::ConvertXmlRpc<T> to be specialized for T.
  *
  * \throws If the parameter can not be found or any exception thrown by dr::fromXmlRpc<T>.
  * \return The loaded parameter.
@@ -59,7 +59,7 @@ T getParam(
 
 /// Get a parameter from the ROS parameter service or a fallback value.
 /**
- * Requires dr::ConvertXmlRpc<T> to be specialized for T.
+ * Requires dr::fromXmlRpc<T> or dr::ConvertXmlRpc<T> to be specialized for T.
  *
  * \throws Any exception thrown by dr::fromXmlRpc<T>.
  * \return The loaded parameter or the fallback value if the parameter was not found.
