@@ -38,19 +38,19 @@ std::ostream & operator<< (std::ostream & stream, Polynomial const & polynomial)
 	return stream;
 }
 
-Polynomial::Term ConvertXmlRpc<Polynomial::Term>::convert(XmlRpc::XmlRpcValue const & value) {
+template<> Polynomial::Term fromXmlRpc<Polynomial::Term>(XmlRpc::XmlRpcValue const & value) {
 	if (value.getType() != XmlRpc::XmlRpcValue::Type::TypeArray) throw std::runtime_error("Cannot convert XmlRpc type " + xmlRpcTypeName(value.getType()) + " to polynomial term.");
 	if (value.size() != 2) throw std::runtime_error("Wrong number of elements for polynomial term: " + std::to_string(value.size()) + " (expected 2).");
 
-	return Polynomial::Term(ConvertXmlRpc<double>::convert(value[0]), ConvertXmlRpc<double>::convert(value[1]));
+	return Polynomial::Term(fromXmlRpc<double>(value[0]), fromXmlRpc<double>(value[1]));
 }
 
-Polynomial ConvertXmlRpc<Polynomial>::convert(XmlRpc::XmlRpcValue const & value) {
+template<> Polynomial fromXmlRpc<Polynomial>(XmlRpc::XmlRpcValue const & value) {
 	if (value.getType() != XmlRpc::XmlRpcValue::Type::TypeArray) throw std::runtime_error("Cannot convert XmlRpc type " + xmlRpcTypeName(value.getType()) + " to polynomial.");
 
 	Polynomial result;
 	for (int i = 0; i < value.size(); ++i) {
-		result.terms.push_back(ConvertXmlRpc<Polynomial::Term>::convert(value[i]));
+		result.terms.push_back(fromXmlRpc<Polynomial::Term>(value[i]));
 	}
 
 	return result;

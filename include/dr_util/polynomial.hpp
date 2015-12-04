@@ -36,15 +36,9 @@ public:
 std::ostream & operator<< (std::ostream & stream, Polynomial const & polynomial);
 
 /// Convert an XmlRpc value to a polynomial.
-template<>
-struct ConvertXmlRpc<Polynomial::Term> {
-	static Polynomial::Term convert(XmlRpc::XmlRpcValue const & value);
-};
+template<> Polynomial::Term fromXmlRpc<Polynomial::Term>(XmlRpc::XmlRpcValue const & value);
 
 /// Convert an XmlRpc value to a polynomial.
-template<>
-struct ConvertXmlRpc<Polynomial> {
-	static Polynomial convert(XmlRpc::XmlRpcValue const & value);
-};
+template<> Polynomial fromXmlRpc<Polynomial>(XmlRpc::XmlRpcValue const & value);
 
 }
