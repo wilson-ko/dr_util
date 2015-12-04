@@ -63,29 +63,19 @@ T fromXmlRpc(
 }
 
 template<>
-struct ConvertXmlRpc<bool> {
-	static bool convert(XmlRpc::XmlRpcValue const & value);
-};
+bool fromXmlRpc<bool>(XmlRpc::XmlRpcValue const & value);
 
 template<>
-struct ConvertXmlRpc<int> {
-	static int convert(XmlRpc::XmlRpcValue const & value);
-};
+int fromXmlRpc<int>(XmlRpc::XmlRpcValue const & value);
 
 template<>
-struct ConvertXmlRpc<double> {
-	static double convert(XmlRpc::XmlRpcValue const & value);
-};
+double fromXmlRpc<double>(XmlRpc::XmlRpcValue const & value);
 
 template<>
-struct ConvertXmlRpc<float> {
-	static float convert(XmlRpc::XmlRpcValue const & value);
-};
+float fromXmlRpc<float>(XmlRpc::XmlRpcValue const & value);
 
 template<>
-struct ConvertXmlRpc<std::string> {
-	static std::string convert(XmlRpc::XmlRpcValue const & value);
-};
+std::string fromXmlRpc<std::string>(XmlRpc::XmlRpcValue const & value);
 
 template<typename T>
 struct ConvertXmlRpc<std::vector<T>> {

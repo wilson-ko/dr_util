@@ -3,38 +3,38 @@
 namespace dr {
 
 bool xmlRpcAsBool(XmlRpc::XmlRpcValue const & value) {
-	// TODO: Ugly hack to circomvent lack of const accessors.
+	// TODO: Ugly hack to circumvent lack of const accessors.
 	return const_cast<XmlRpc::XmlRpcValue &>(value);
 }
 
 int xmlRpcAsInt(XmlRpc::XmlRpcValue const & value) {
-	// TODO: Ugly hack to circomvent lack of const accessors.
+	// TODO: Ugly hack to circumvent lack of const accessors.
 	return const_cast<XmlRpc::XmlRpcValue &>(value);
 }
 
 double xmlRpcAsDouble(XmlRpc::XmlRpcValue const & value) {
-	// TODO: Ugly hack to circomvent lack of const accessors.
+	// TODO: Ugly hack to circumvent lack of const accessors.
 	return const_cast<XmlRpc::XmlRpcValue &>(value);
 }
 
 std::string const & xmlRpcAsString(XmlRpc::XmlRpcValue const & value) {
-	// TODO: Ugly hack to circomvent lack of const accessors.
+	// TODO: Ugly hack to circumvent lack of const accessors.
 	return const_cast<XmlRpc::XmlRpcValue &>(value);
 }
 
 XmlRpc::XmlRpcValue const & xmlRpcAt(XmlRpc::XmlRpcValue const & value, std::string const & key) {
-	// TODO: Ugly hack to circomvent lack of const accessors.
+	// TODO: Ugly hack to circumvent lack of const accessors.
 	if (!value.hasMember(key)) throw std::runtime_error("key `" + key + "' not found");
 	return const_cast<XmlRpc::XmlRpcValue &>(value)[key];
 }
 
 XmlRpc::XmlRpcValue::ValueStruct::const_iterator xmlRpcBegin(XmlRpc::XmlRpcValue const & value) {
-	// TODO: Ugly hack to circomvent lack of const accessors.
+	// TODO: Ugly hack to circumvent lack of const accessors.
 	return const_cast<XmlRpc::XmlRpcValue &>(value).begin();
 }
 
 XmlRpc::XmlRpcValue::ValueStruct::const_iterator xmlRpcEnd(XmlRpc::XmlRpcValue const & value) {
-	// TODO: Ugly hack to circomvent lack of const accessors.
+	// TODO: Ugly hack to circumvent lack of const accessors.
 	return const_cast<XmlRpc::XmlRpcValue &>(value).end();
 }
 
@@ -62,30 +62,35 @@ void ensureXmlRpcType(XmlRpc::XmlRpcValue const & value, XmlRpc::XmlRpcValue::Ty
 	if (value.getType() != wanted) throw makeXmlRpcTypeError(value.getType(), target_type);
 }
 
-bool ConvertXmlRpc<bool>::convert(XmlRpc::XmlRpcValue const & value) {
+template<>
+bool fromXmlRpc<bool>(XmlRpc::XmlRpcValue const & value) {
 	if (value.getType() == XmlRpc::XmlRpcValue::TypeBoolean) return bool(XmlRpc::XmlRpcValue(value));
 	if (value.getType() == XmlRpc::XmlRpcValue::TypeInt)     return int(XmlRpc::XmlRpcValue(value));
 	throw makeXmlRpcTypeError(value.getType(), "boolean");
 }
 
-int ConvertXmlRpc<int>::convert(XmlRpc::XmlRpcValue const & value) {
+template<>
+int fromXmlRpc<int>(XmlRpc::XmlRpcValue const & value) {
 	if (value.getType() == XmlRpc::XmlRpcValue::TypeInt) return int(XmlRpc::XmlRpcValue(value));
 	throw makeXmlRpcTypeError(value.getType(), "integer");
 }
 
-double ConvertXmlRpc<double>::convert(XmlRpc::XmlRpcValue const & value) {
+template<>
+double fromXmlRpc<double>(XmlRpc::XmlRpcValue const & value) {
 	if (value.getType() == XmlRpc::XmlRpcValue::TypeDouble) return double(XmlRpc::XmlRpcValue(value));
 	if (value.getType() == XmlRpc::XmlRpcValue::TypeInt)    return int(XmlRpc::XmlRpcValue(value));
 	throw makeXmlRpcTypeError(value.getType(), "double");
 }
 
-float ConvertXmlRpc<float>::convert(XmlRpc::XmlRpcValue const & value) {
+template<>
+float fromXmlRpc<float>(XmlRpc::XmlRpcValue const & value) {
 	if (value.getType() == XmlRpc::XmlRpcValue::TypeDouble) return double(XmlRpc::XmlRpcValue(value));
 	if (value.getType() == XmlRpc::XmlRpcValue::TypeInt)    return int(XmlRpc::XmlRpcValue(value));
 	throw makeXmlRpcTypeError(value.getType(), "float");
 }
 
-std::string ConvertXmlRpc<std::string>::convert(XmlRpc::XmlRpcValue const & value) {
+template<>
+std::string fromXmlRpc<std::string>(XmlRpc::XmlRpcValue const & value) {
 	if (value.getType() == XmlRpc::XmlRpcValue::TypeString) return std::string(XmlRpc::XmlRpcValue(value));
 	throw makeXmlRpcTypeError(value.getType(), "string");
 }
