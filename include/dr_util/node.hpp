@@ -1,14 +1,14 @@
 #pragma once
+#include "dispatch.hpp"
+
+#include <ros/ros.h>
+#include <dr_log/dr_log.hpp>
+#include <dr_param/param.hpp>
 
 #include <vector>
 #include <algorithm>
 #include <utility>
 
-#include <ros/ros.h>
-#include <dr_log/dr_log.hpp>
-
-#include "dispatch.hpp"
-#include "param.hpp"
 
 
 namespace dr {
@@ -16,47 +16,6 @@ namespace dr {
 /// Shorthand to get a ServiceEvent type for a service.
 template<typename Service>
 using ServiceEvent = ros::ServiceEvent<typename Service::Request, typename Service::Response>;
-
-
-/// Get a vector from the ROS parameter server.
-template<typename T>
-std::vector<T> getParamList(
-	ros::NodeHandle const & node, ///< The node handle to use for parameter name resolution.
-	std::string const & name      ///< The parameter to retrieve.
-) {
-	return getParam<std::vector<T>>(node, name);
-}
-
-/// Get a vector from the ROS parameter server.
-template<typename T>
-std::vector<T> getParamList(
-	ros::NodeHandle const & node,    ///< The node handle to use for parameter name resolution.
-	std::string const & name,        ///< The parameter to retrieve.
-	std::vector<T> const & fallback, ///< The fallback value to return if the parameter is not found.
-	bool warn = true                 ///< If true, log a warning when the parameter was not found.
-) {
-	return getParam<std::vector<T>>(node, name, fallback, warn);
-}
-
-/// Get an array from the ROS parameter server.
-template<typename T, std::size_t N>
-std::array<T, N> getParamArray(
-	ros::NodeHandle const & node,      ///< The node handle to use for parameter name resolution.
-	std::string const & name           ///< The parameter to retrieve.
-) {
-	return getParam<std::array<T, N>>(node, name);
-}
-
-/// Get an array from the ROS parameter server.
-template<typename T, std::size_t N>
-std::array<T, N> getParamArray(
-	ros::NodeHandle const & node,      ///< The node handle to use for parameter name resolution.
-	std::string const & name,          ///< The parameter to retrieve.
-	std::array<T, N> const & fallback, ///< The fallback value to return if the parameter is not found.
-	bool warn = true                   ///< If true, log a warning when the parameter was not found.
-) {
-	return getParam<std::array<T, N>>(node, name, fallback, warn);
-}
 
 /// A ROS node wrapper with some utility functions.
 class Node {

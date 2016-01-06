@@ -4,6 +4,7 @@ project(dr_util)
 find_package(catkin REQUIRED COMPONENTS
 	dr_base
 	dr_log
+	dr_param
 	roscpp
 	roslib
 	tf
@@ -12,7 +13,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
 	INCLUDE_DIRS include
 	LIBRARIES ${PROJECT_NAME}
-	CATKIN_DEPENDS dr_log
+	CATKIN_DEPENDS dr_log dr_param
 )
 
 dr_include_directories(
@@ -27,7 +28,6 @@ add_library(${PROJECT_NAME}
 	src/timestamp.cpp
 	src/polynomial.cpp
 	src/resource.cpp
-	src/xmlrpc.cpp
 )
 
 target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES})
@@ -43,11 +43,9 @@ dr_add_gtest(button_filter    test/button_filter.cpp)
 dr_add_gtest(geometry         test/geometry.cpp)
 dr_add_gtest(polynomial       test/polynomial.cpp)
 dr_add_gtest(resource         test/resource.cpp)
-dr_add_gtest(xmlrpc           test/xmlrpc.cpp)
 
 target_link_libraries(${PROJECT_NAME}_test_polynomial ${PROJECT_NAME})
 target_link_libraries(${PROJECT_NAME}_test_resource   ${PROJECT_NAME} ${catkin_LIBRARIES})
-target_link_libraries(${PROJECT_NAME}_test_xmlrpc     ${PROJECT_NAME})
 
 install(DIRECTORY include/${PROJECT_NAME}/
 	DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
