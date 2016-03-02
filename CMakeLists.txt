@@ -32,9 +32,6 @@ add_library(${PROJECT_NAME}
 
 target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES})
 
-add_executable(record_robot_position src/record_robot_position.cpp)
-target_link_libraries(record_robot_position ${catkin_LIBRARIES})
-
 dr_add_gtest(functional       test/functional.cpp)
 dr_add_gtest(integer_sequence test/integer_sequence.cpp)
 dr_add_gtest(tuple            test/tuple.cpp)
@@ -47,7 +44,14 @@ dr_add_gtest(resource         test/resource.cpp)
 target_link_libraries(${PROJECT_NAME}_test_polynomial ${PROJECT_NAME})
 target_link_libraries(${PROJECT_NAME}_test_resource   ${PROJECT_NAME} ${catkin_LIBRARIES})
 
-install(DIRECTORY include/${PROJECT_NAME}/
-	DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
-	FILES_MATCHING PATTERN "*.hpp"
+install(
+	TARGETS "${PROJECT_NAME}"
+	ARCHIVE DESTINATION "${CATKIN_PACKAGE_LIB_DESTINATION}"
+	LIBRARY DESTINATION "${CATKIN_PACKAGE_LIB_DESTINATION}"
+	RUNTIME DESTINATION "${CATKIN_GLOBAL_BIN_DESTINATION}"
+)
+
+install(
+	DIRECTORY "include/${PROJECT_NAME}/"
+	DESTINATION "${CATKIN_PACKAGE_INCLUDE_DESTINATION}"
 )
