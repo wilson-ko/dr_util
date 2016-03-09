@@ -1,12 +1,22 @@
 #include "timestamp.hpp"
-#include <ctime>
+
+#include <boost/date_time/posix_time/posix_time.hpp>
+#include <boost/date_time/time_facet.hpp>
+#include <sstream>
+
+namespace dr {
+
+namespace {
+	std::string formatTime(boost::posix_time::ptime timestamp, std::string const & format) {
+		std::stringstream buffer;
+		buffer.imbue(std::locale(buffer.getloc(), new boost::posix_time::time_facet(format.c_str())));
+		buffer << timestamp;
+		return buffer.str();
+	}
+}
 
 void getTimeString(std::string & output) {
-	time_t now = time(0);
-	tm * ltm = localtime(&now);
-	char mbstr[100];
-	std::strftime(mbstr, sizeof(mbstr), "%F_%H-%M-%S", ltm);
-	output = mbstr;
+	output = formatTime(boost::posix_time::microsec_clock::universal_time(), "%Y-%m-%d %H-%M-%S.%f");
 }
 
 std::string getTimeString() {
@@ -16,9 +26,7 @@ std::string getTimeString() {
 }
 
 std::string getDateString() {
-	time_t now = time(0);
-	tm * ltm = localtime(&now);
-	char mbstr[100];
-	std::strftime(mbstr, sizeof(mbstr), "%F", ltm);
-	return mbstr;
+	return formatTime(boost::posix_time::microsec_clock::universal_time(), "%Y-%m-%d");
+}
+
 }
