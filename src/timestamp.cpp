@@ -16,7 +16,7 @@ namespace {
 }
 
 void getTimeString(std::string & output) {
-	output = formatTime(boost::posix_time::microsec_clock::universal_time(), "%Y-%m-%d %H-%M-%S.%f");
+	output = formatTime(boost::posix_time::microsec_clock::universal_time(), "%Y-%m-%d_%H-%M-%S.%f");
 }
 
 std::string getTimeString() {
