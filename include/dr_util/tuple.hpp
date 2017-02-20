@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cstddef>
-#include <tuple> 
+#include <tuple>
 
 #include "integer_sequence.hpp"
 
