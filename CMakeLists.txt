@@ -3,34 +3,27 @@ project(dr_util)
 
 find_package(catkin REQUIRED COMPONENTS
 	dr_base
-	dr_log
-	dr_param
-	roscpp
-	roslib
-	tf
 )
+
+find_package(Boost REQUIRED COMPONENTS filesystem date_time)
 
 catkin_package(
-	INCLUDE_DIRS include
 	LIBRARIES ${PROJECT_NAME}
-	CATKIN_DEPENDS dr_log dr_param
-)
-
-dr_include_directories(
-	include/${PROJECT_NAME}
-	${catkin_INCLUDE_DIRS}
+	INCLUDE_DIRS include
+	DEPENDS Boost
 )
 
 add_library(${PROJECT_NAME}
 	src/file_system.cpp
-	src/node.cpp
-	src/signal.cpp
 	src/timestamp.cpp
 	src/polynomial.cpp
-	src/resource.cpp
 )
 
-target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} PRIVATE ${catkin_LIBRARIES} ${Boost_LIBRARIES})
+target_include_directories(${PROJECT_NAME}
+	PRIVATE "include/${PROJECT_NAME}"
+	SYSTEM PRIVATE ${Boost_INCLUDE_DIRS}
+)
 
 dr_add_gtest(functional       test/functional.cpp)
 dr_add_gtest(integer_sequence test/integer_sequence.cpp)
@@ -39,10 +32,8 @@ dr_add_gtest(bitwise          test/bitwise.cpp)
 dr_add_gtest(button_filter    test/button_filter.cpp)
 dr_add_gtest(geometry         test/geometry.cpp)
 dr_add_gtest(polynomial       test/polynomial.cpp)
-dr_add_gtest(resource         test/resource.cpp)
 
 target_link_libraries(${PROJECT_NAME}_test_polynomial ${PROJECT_NAME})
-target_link_libraries(${PROJECT_NAME}_test_resource   ${PROJECT_NAME} ${catkin_LIBRARIES})
 
 install(
 	TARGETS ${PROJECT_NAME}
