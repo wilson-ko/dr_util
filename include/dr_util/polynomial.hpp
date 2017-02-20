@@ -1,5 +1,3 @@
-#include <dr_param/xmlrpc.hpp>
-
 #include <vector>
 #include <tuple>
 #include <ostream>
@@ -34,11 +32,5 @@ public:
 
 /// Output a polynomial to an ostream.
 std::ostream & operator<< (std::ostream & stream, Polynomial const & polynomial);
-
-/// Convert an XmlRpc value to a polynomial.
-template<> Polynomial::Term fromXmlRpc<Polynomial::Term>(XmlRpc::XmlRpcValue const & value);
-
-/// Convert an XmlRpc value to a polynomial.
-template<> Polynomial fromXmlRpc<Polynomial>(XmlRpc::XmlRpcValue const & value);
 
 }
