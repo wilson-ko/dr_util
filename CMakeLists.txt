@@ -34,6 +34,7 @@ dr_add_gtest(bitwise          test/bitwise.cpp)
 dr_add_gtest(button_filter    test/button_filter.cpp)
 dr_add_gtest(geometry         test/geometry.cpp)
 dr_add_gtest(polynomial       test/polynomial.cpp)
+dr_add_gtest(voidt_t          test/void_t.cpp)
 
 target_link_libraries(${PROJECT_NAME}_test_polynomial ${PROJECT_NAME})
 
