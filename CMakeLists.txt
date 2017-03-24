@@ -1,11 +1,17 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(dr_util)
 
-find_package(catkin REQUIRED COMPONENTS
-	dr_base
-)
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED on)
+set(CMAKE_CXX_EXTENSIONS off)
+add_compile_options(-Wall -Wextra -Wpedantic -Werror)
 
+find_package(catkin REQUIRED COMPONENTS dr_cmake)
 find_package(Boost REQUIRED COMPONENTS filesystem date_time)
+include_directories(
+	"include/${PROJECT_NAME}"
+	SYSTEM "${Boost_INCLUDE_DIRS}"
+)
 
 catkin_package(
 	LIBRARIES ${PROJECT_NAME}
@@ -20,10 +26,6 @@ add_library(${PROJECT_NAME}
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE ${catkin_LIBRARIES} ${Boost_LIBRARIES})
-target_include_directories(${PROJECT_NAME}
-	PRIVATE "include/${PROJECT_NAME}"
-	SYSTEM PRIVATE ${Boost_INCLUDE_DIRS}
-)
 
 dr_add_gtest(functional       test/functional.cpp)
 dr_add_gtest(integer_sequence test/integer_sequence.cpp)

@@ -6,31 +6,45 @@
 
 #include "integer_sequence.hpp"
 
-using namespace dr;
-
 int main(int argc, char * * argv) {
 	testing::InitGoogleTest(&argc, argv);
 	return RUN_ALL_TESTS();
 }
 
-template<typename T>
-T sum(integer_sequence<T>) {
-	return 0;
+namespace dr {
+
+template<typename T1, typename T2>
+constexpr bool have_same_types(T1 const &, T2 const &) {
+	return std::is_same<T1, T2>{};
 }
 
-template<typename T, T first, T... I>
-T sum(integer_sequence<T, first, I...>) {
-	return first + sum(integer_sequence<T, I...>{});
+TEST(IntegerSequence, have_same_types) {
+	bool b1;
+	bool b2;
+	bool const b3 = false;
+	bool volatile b4;
+	bool * bp;
+	int i;
+
+	static_assert(have_same_types(b1, b2), "");
+	static_assert(have_same_types(b1, b3), "");
+	static_assert(not have_same_types(b1, b4), "");
+	static_assert(not have_same_types(b1, bp), "");
+	static_assert(not have_same_types(b1, i), "");
 }
 
-TEST(IntegerSequenceTest, makeIntegerSequence) {
-	EXPECT_EQ(3, sum(make_integer_sequence<int, 3>{}));
-	EXPECT_EQ(3, (make_integer_sequence<int, 3>{}).size());
+TEST(IntegerSequence, add_offset_int) {
+	auto offset_sequence   = offset_integer_sequence<int, 5>(std::make_integer_sequence<int, 3>{});
+	auto expected_sequence = std::integer_sequence<int, 5, 6, 7>{};
+	static_assert(have_same_types(offset_sequence, expected_sequence), "");
+	ASSERT_TRUE(true);
 }
 
-TEST(IntegerSequenceTest, makeIntegerSlice) {
-	EXPECT_EQ(12, sum(make_integer_slice<int, 3, 6>{}));
-	EXPECT_EQ(3, (make_integer_slice<int, 3, 6>{}).size());
+TEST(IntegerSequence, add_offset_index) {
+	auto offset_sequence   = offset_index_sequence<8>(std::make_index_sequence<3>{});
+	auto expected_sequence = std::index_sequence<8, 9, 10>{};
+	static_assert(have_same_types(offset_sequence, expected_sequence), "");
+	ASSERT_TRUE(true);
 }
 
-
+}
