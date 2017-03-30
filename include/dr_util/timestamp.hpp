@@ -1,12 +1,20 @@
 #pragma once
 #include <boost/date_time/posix_time/posix_time.hpp>
+
+#include <chrono>
 #include <string>
 
 namespace dr {
 
-	// Get a string representing a posix ptime in the specified format
+	/// Get a string representing a posix ptime in the specified format
 	std::string formatTime(
 		boost::posix_time::ptime timestamp,
+		std::string const & format
+	);
+
+	/// Get a string representing a posix ptime in the specified format
+	std::string formatTime(
+		std::chrono::system_clock::time_point time,
 		std::string const & format
 	);
 
