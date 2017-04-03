@@ -4,33 +4,33 @@
 #include <functional>
 #include <tuple>
 #include <iostream>
+#include <utility>
 
-#include "integer_sequence.hpp"
 
 namespace dr {
 
 	namespace impl {
 		template<typename F, template<typename...> class Params, typename... Args, std::size_t... I>
 		decltype(std::declval<F>()(std::get<I>(std::declval<Params<Args...>>())...))
-		_call(F & func, Params<Args...> const & params, index_sequence<I...>) {
+		_call(F & func, Params<Args...> const & params, std::index_sequence<I...>) {
 			return func(std::get<I>(params)...);
 		}
 
 		template<typename F, template<typename...> class Params, typename... Args, std::size_t... I>
 		decltype(std::declval<F const>()(std::get<I>(std::declval<Params<Args...>>())...))
-		_call(F const & func, Params<Args...> const & params, index_sequence<I...>) {
+		_call(F const & func, Params<Args...> const & params, std::index_sequence<I...>) {
 			return func(std::get<I>(params)...);
 		}
 	}
 
 	template<typename F, template<typename...> class Params, typename... Args>
-	auto call(F & func, Params<Args...> const & params) -> decltype(impl::_call(func, params, index_sequence_for<Args...>{})) {
-		return impl::_call(func, params, index_sequence_for<Args...>{});
+	auto call(F & func, Params<Args...> const & params) -> decltype(impl::_call(func, params, std::index_sequence_for<Args...>{})) {
+		return impl::_call(func, params, std::index_sequence_for<Args...>{});
 	}
 
 	template<typename F, template<typename...> class Params, typename... Args>
-	auto call(F const & func, Params<Args...> const & params) -> decltype(impl::_call(func, params, index_sequence_for<Args...>{})) {
-		return impl::_call(func, params, index_sequence_for<Args...>{});
+	auto call(F const & func, Params<Args...> const & params) -> decltype(impl::_call(func, params, std::index_sequence_for<Args...>{})) {
+		return impl::_call(func, params, std::index_sequence_for<Args...>{});
 	}
 
 //	namespace impl {
