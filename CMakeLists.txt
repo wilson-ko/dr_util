@@ -4,11 +4,11 @@ project(dr_util)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
-
 add_compile_options(-Wall -Wextra -Wpedantic -Werror)
 
-find_package(catkin REQUIRED COMPONENTS dr_cmake)
+find_package(catkin REQUIRED)
 find_package(Boost REQUIRED COMPONENTS filesystem date_time)
+
 include_directories(
 	"include/${PROJECT_NAME}"
 	SYSTEM "${Boost_INCLUDE_DIRS}"
@@ -21,6 +21,8 @@ catkin_package(
 )
 
 add_library(${PROJECT_NAME}
+	src/environment.cpp
+	src/expand.cpp
 	src/file_system.cpp
 	src/timestamp.cpp
 	src/polynomial.cpp
@@ -28,17 +30,21 @@ add_library(${PROJECT_NAME}
 
 target_link_libraries(${PROJECT_NAME} PRIVATE ${catkin_LIBRARIES} ${Boost_LIBRARIES})
 
-dr_add_gtest(functional       test/functional.cpp)
-dr_add_gtest(integer_sequence test/integer_sequence.cpp)
-dr_add_gtest(tuple            test/tuple.cpp)
-dr_add_gtest(bitwise          test/bitwise.cpp)
-dr_add_gtest(button_filter    test/button_filter.cpp)
-dr_add_gtest(geometry         test/geometry.cpp)
-dr_add_gtest(polynomial       test/polynomial.cpp)
-dr_add_gtest(voidt_t          test/void_t.cpp)
-dr_add_gtest(timestamp        test/timestamp.cpp)
+catkin_add_gtest(${PROJECT_NAME}_test_bitwise          test/bitwise.cpp)
+catkin_add_gtest(${PROJECT_NAME}_test_button_filter    test/button_filter.cpp)
+catkin_add_gtest(${PROJECT_NAME}_test_environment      test/environment.cpp)
+catkin_add_gtest(${PROJECT_NAME}_test_expand           test/expand.cpp)
+catkin_add_gtest(${PROJECT_NAME}_test_functional       test/functional.cpp)
+catkin_add_gtest(${PROJECT_NAME}_test_geometry         test/geometry.cpp)
+catkin_add_gtest(${PROJECT_NAME}_test_integer_sequence test/integer_sequence.cpp)
+catkin_add_gtest(${PROJECT_NAME}_test_polynomial       test/polynomial.cpp)
+catkin_add_gtest(${PROJECT_NAME}_test_timestamp        test/timestamp.cpp)
+catkin_add_gtest(${PROJECT_NAME}_test_tuple            test/tuple.cpp)
+catkin_add_gtest(${PROJECT_NAME}_test_voidt_t          test/void_t.cpp)
 
-target_link_libraries(${PROJECT_NAME}_test_polynomial ${PROJECT_NAME})
+target_link_libraries(${PROJECT_NAME}_test_environment ${PROJECT_NAME})
+target_link_libraries(${PROJECT_NAME}_test_expand      ${PROJECT_NAME})
+target_link_libraries(${PROJECT_NAME}_test_polynomial  ${PROJECT_NAME})
 
 install(
 	TARGETS ${PROJECT_NAME}
