@@ -39,6 +39,7 @@ catkin_add_gtest(${PROJECT_NAME}_test_functional       test/functional.cpp)
 catkin_add_gtest(${PROJECT_NAME}_test_geometry         test/geometry.cpp)
 catkin_add_gtest(${PROJECT_NAME}_test_integer_sequence test/integer_sequence.cpp)
 catkin_add_gtest(${PROJECT_NAME}_test_polynomial       test/polynomial.cpp)
+catkin_add_gtest(${PROJECT_NAME}_test_scope_guard      test/scope_guard.cpp)
 catkin_add_gtest(${PROJECT_NAME}_test_timestamp        test/timestamp.cpp)
 catkin_add_gtest(${PROJECT_NAME}_test_tuple            test/tuple.cpp)
 catkin_add_gtest(${PROJECT_NAME}_test_voidt_t          test/void_t.cpp)
@@ -46,6 +47,7 @@ catkin_add_gtest(${PROJECT_NAME}_test_voidt_t          test/void_t.cpp)
 target_link_libraries(${PROJECT_NAME}_test_environment ${PROJECT_NAME})
 target_link_libraries(${PROJECT_NAME}_test_expand      ${PROJECT_NAME})
 target_link_libraries(${PROJECT_NAME}_test_polynomial  ${PROJECT_NAME})
+target_link_libraries(${PROJECT_NAME}_test_scope_guard ${PROJECT_NAME})
 
 install(
 	TARGETS ${PROJECT_NAME}
