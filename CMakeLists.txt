@@ -1,9 +1,10 @@
-cmake_minimum_required(VERSION 2.8.3)
+cmake_minimum_required(VERSION 3.8)
 project(dr_util)
 
-set(CMAKE_CXX_STANDARD 14)
-set(CMAKE_CXX_STANDARD_REQUIRED on)
-set(CMAKE_CXX_EXTENSIONS off)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
 add_compile_options(-Wall -Wextra -Wpedantic -Werror)
 
 find_package(catkin REQUIRED COMPONENTS dr_cmake)
