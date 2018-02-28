@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package format="2">
 	<name>dr_util</name>
-	<version>1.0.0</version>
+	<version>0.1.0</version>
 	<description>Delft Robotics utility functions.</description>
 	<license>all-rights-reserved</license>
 
@@ -9,6 +9,5 @@
 	<author email="maarten@de-vri.es">Maarten de Vries</author>
 
 	<buildtool_depend>catkin</buildtool_depend>
-	<depend>dr_base</depend>
 	<depend>boost</depend>
 </package>
