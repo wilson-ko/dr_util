@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package format="2">
 	<name>dr_util</name>
-	<version>0.1.1</version>
+	<version>0.2.0</version>
 	<description>Delft Robotics utility functions.</description>
 	<license>all-rights-reserved</license>
 
