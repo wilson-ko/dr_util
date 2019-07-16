@@ -10,4 +10,6 @@
 
 	<buildtool_depend>catkin</buildtool_depend>
 	<depend>boost</depend>
+	<test_depend>catch2</test_depend>
+	<test_depend>ros</test_depend>
 </package>

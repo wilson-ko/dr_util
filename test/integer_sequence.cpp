@@ -1,10 +1,16 @@
+// C++
 #include <string>
 #include <sstream>
 #include <array>
 
-#include <gtest/gtest.h>
+// Catch2
+#include <catch2/catch.hpp>
 
+// This repository
 #include "integer_sequence.hpp"
+
+/*
+#include <gtest/gtest.h>
 
 int main(int argc, char * * argv) {
 	testing::InitGoogleTest(&argc, argv);
@@ -48,3 +54,4 @@ TEST(IntegerSequence, add_offset_index) {
 }
 
 }
+*/

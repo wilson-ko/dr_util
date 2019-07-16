@@ -1,6 +1,22 @@
+// C
+#include <stdlib.h>
+
+// Catch2
+#include <catch2/catch.hpp>
+
+// This repository
 #include "environment.hpp"
 
-#include <stdlib.h>
+TEST_CASE("Environment -- getEnvironment", "getEnvironment") {
+	::clearenv();
+	REQUIRE(dr::getEnvironment() == (std::map<std::string, std::string>{}));
+	::setenv("FOO", "aap", true);
+	REQUIRE(dr::getEnvironment() == (std::map<std::string, std::string>{{"FOO", "aap"}}));
+	::setenv("BAR", "noot", true);
+	REQUIRE(dr::getEnvironment() == (std::map<std::string, std::string>{{"FOO", "aap"}, {"BAR", "noot"}}));
+}
+
+/*
 #include <gtest/gtest.h>
 
 int main(int argc, char ** argv) {
@@ -20,3 +36,4 @@ TEST(Environment, getEnvironment) {
 }
 
 }
+*/

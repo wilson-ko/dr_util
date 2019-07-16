@@ -1,7 +1,30 @@
-#include "resource.hpp"
+// Catch2
+#include <catch2/catch.hpp>
 
-#include <ros/package.h>
+// ROS
 
+// This repository
+// #include "resource.hpp"
+
+// #include <ros/package.h>
+
+TEST_CASE("ResourceTest -- packageUrl", "packageUrl") {
+	REQUIRE(ros::package::getPath("dr_util") + "/test.file" == rosUrlToPath("package://dr_util/test.file"));
+}
+
+TEST_CASE("ResourceTest -- localFileUrl", "localFileUrl") {
+	REQUIRE("/test.file" == rosUrlToPath("file:///test.file"));
+}
+
+TEST_CASE("ResourceTest - remoteFileUrl", "remoteFileUrl") {
+	REQUIRE_THROWS(rosUrlToPath("file://host/test.file"));
+}
+
+TEST_CASE("ResourceTest -- unsupportedScheme", "unsupportedScheme") {
+	REQUIRE_THROWS(rosUrlToPath("http://example.com/test.file"));
+}
+
+/*
 #include <gtest/gtest.h>
 
 int main(int argc, char ** argv) {
@@ -28,3 +51,4 @@ TEST(ResourceTest, unsupportedScheme) {
 }
 
 }
+*/

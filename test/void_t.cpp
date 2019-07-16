@@ -1,5 +1,22 @@
+// Catch2
+#include <catch2/catch.hpp>
+
+// This repository
 #include "void_t.hpp"
 
+namespace dr {
+
+TEST_CASE("VoidT -- type", "type") {
+	static_assert(std::is_same<void, void_t<>>{}, "");
+	static_assert(std::is_same<void, void_t<int>>{}, "");
+	static_assert(std::is_same<void, void_t<bool>>{}, "");
+	static_assert(std::is_same<void, void_t<bool, int>>{}, "");
+	SUCCEED();
+}
+
+}
+
+/*
 #include <gtest/gtest.h>
 
 using namespace dr;
@@ -20,3 +37,4 @@ TEST(VoidT, type) {
 }
 
 }
+*/

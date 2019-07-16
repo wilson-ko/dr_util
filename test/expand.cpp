@@ -1,5 +1,32 @@
+// Catch2
+#include <catch2/catch.hpp>
+
+// This repository
 #include "expand.hpp"
 
+TEST_CASE("Expand -- simple", "simple") {
+	REQUIRE(dr::expandVariables("$test", {{"test", "foo"}}) == "foo");
+	REQUIRE(dr::expandVariables("$test", {{"test", "bar"}}) == "bar");
+	REQUIRE(dr::expandVariables("${test}", {{"test", "foo"}}) == "foo");
+	REQUIRE(dr::expandVariables("${test}", {{"test", "bar"}}) == "bar");
+}
+
+TEST_CASE("Expand -- sentence", "sentence") {
+	REQUIRE(dr::expandVariables("Hello $name, welcome to $place", {{"name", "Rick"}, {"place", "Earth"}}) == "Hello Rick, welcome to Earth");
+	REQUIRE(dr::expandVariables("Hello ${name}, welcome to ${place}", {{"name", "Rick"}, {"place", "Earth"}}) == "Hello Rick, welcome to Earth");
+}
+
+TEST_CASE("Expand -- nipple_brackets", "nipple_brackets") {
+	REQUIRE(dr::expandVariables("test$testtest", {{"test", "wrong"}, {"testtest", "good"}}) == "testgood");
+	REQUIRE(dr::expandVariables("test${test}test", {{"test", "good"}, {"testtest", "wrong"}}) == "testgoodtest");
+}
+
+TEST_CASE("Expand -- ignore_empty_key", "ignore_empty_key") {
+	REQUIRE(dr::expandVariables("$", {{"", "aap"}}) == "$");
+	REQUIRE(dr::expandVariables("${}", {{"", "aap"}}) == "${}");
+}
+
+/*
 #include <gtest/gtest.h>
 
 int main(int argc, char ** argv) {
@@ -32,3 +59,4 @@ TEST(Expand, ignore_empty_key) {
 }
 
 }
+*/
