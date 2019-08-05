@@ -11,11 +11,11 @@ namespace dr {
 
 TEST(BitwiseTest, makeBitMask) {
 	// least significant bit
-	EXPECT_EQ(0x1,        bitMask(0));
+	EXPECT_EQ(0x1u,        bitMask(0));
 	// some middle bit
-	EXPECT_EQ(0x4000,     bitMask(14));
+	EXPECT_EQ(0x4000u,     bitMask(14));
 	// most significant bit
-	EXPECT_EQ(0x80000000, bitMask(31));
+	EXPECT_EQ(0x80000000u, bitMask(31));
 }
 
 TEST(BitwiseTest, testTestBit) {
