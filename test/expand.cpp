@@ -9,26 +9,26 @@ int main(int argc, char ** argv) {
 
 namespace dr {
 
-TEST(Expand, simple) {
+TEST(Expand, simple) { //NOLINT
 	EXPECT_EQ(expandVariables("$test", {{"test", "foo"}}), "foo");
 	EXPECT_EQ(expandVariables("$test", {{"test", "bar"}}), "bar");
 	EXPECT_EQ(expandVariables("${test}", {{"test", "foo"}}), "foo");
 	EXPECT_EQ(expandVariables("${test}", {{"test", "bar"}}), "bar");
 }
 
-TEST(Expand, sentence) {
+TEST(Expand, sentence) { //NOLINT
 	EXPECT_EQ(expandVariables("Hello $name, welcome to $place", {{"name", "Rick"}, {"place", "Earth"}}), "Hello Rick, welcome to Earth");
 	EXPECT_EQ(expandVariables("Hello ${name}, welcome to ${place}", {{"name", "Rick"}, {"place", "Earth"}}), "Hello Rick, welcome to Earth");
 }
 
-TEST(Expand, nipple_brackets) {
+TEST(Expand, nipple_brackets) { //NOLINT
 	EXPECT_EQ(expandVariables("test$testtest", {{"test", "wrong"}, {"testtest", "good"}}), "testgood");
 	EXPECT_EQ(expandVariables("test${test}test", {{"test", "good"}, {"testtest", "wrong"}}), "testgoodtest");
 }
 
-TEST(Expand, ignore_empty_key) {
+TEST(Expand, ignore_empty_key) { //NOLINT
 	EXPECT_EQ(expandVariables("$", {{"", "aap"}}), "$");
 	EXPECT_EQ(expandVariables("${}", {{"", "aap"}}), "${}");
 }
 
-}
+} //namespace dr

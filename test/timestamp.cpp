@@ -4,7 +4,7 @@
 
 #include <chrono>
 #include <ctime>
-#include <stdlib.h>
+#include <cstdlib>
 
 int main(int argc, char ** argv) {
 	testing::InitGoogleTest(&argc, argv);
@@ -13,7 +13,7 @@ int main(int argc, char ** argv) {
 
 namespace dr {
 
-TEST(timestamp, system_clock_epoch) {
+TEST(timestamp, system_clock_epoch) { //NOLINT
 	std::time_t epoch = std::chrono::system_clock::to_time_t(std::chrono::system_clock::time_point{});
 	std::tm * date = std::gmtime(&epoch);
 	ASSERT_EQ(date->tm_year,  70);
@@ -26,7 +26,7 @@ TEST(timestamp, system_clock_epoch) {
 	ASSERT_EQ(date->tm_isdst, 0);
 }
 
-TEST(timestamp, chrono_ptime_epoch) {
+TEST(timestamp, chrono_ptime_epoch) { //NOLINT
 	boost::posix_time::ptime epoch = toPtime(std::chrono::system_clock::time_point{});
 	ASSERT_EQ(epoch.date().year(), 1970);
 	ASSERT_EQ(epoch.date().month(), 1);
@@ -35,18 +35,18 @@ TEST(timestamp, chrono_ptime_epoch) {
 	ASSERT_EQ(epoch.time_of_day(), boost::posix_time::seconds(0));
 }
 
-TEST(timestamp, chrono_ptime_2017) {
-	setenv("TZ", "UTC", true);
+TEST(timestamp, chrono_ptime_2017) { //NOLINT
+	setenv("TZ", "UTC", 1);
 	::tzset();
 
-	std::tm tm;
-	tm.tm_year = 117;
-	tm.tm_mon  = 2;
-	tm.tm_mday = 30;
-	tm.tm_wday = 4;
-	tm.tm_hour = 13;
-	tm.tm_min  = 37;
-	tm.tm_sec  = 42;
+	std::tm tm{};
+	tm.tm_year = 117;  //NOLINT
+	tm.tm_mon  = 2;    //NOLINT
+	tm.tm_mday = 30;   //NOLINT
+	tm.tm_wday = 4;    //NOLINT
+	tm.tm_hour = 13;   //NOLINT
+	tm.tm_min  = 37;   //NOLINT
+	tm.tm_sec  = 42;   //NOLINT
 
 	boost::posix_time::ptime time = toPtime(std::chrono::system_clock::from_time_t(std::mktime(&tm)));
 
@@ -61,4 +61,4 @@ TEST(timestamp, chrono_ptime_2017) {
 }
 
 
-}
+} //namespace dr

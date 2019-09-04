@@ -34,4 +34,4 @@ std::string getDateString() {
 	return formatTime(boost::posix_time::microsec_clock::universal_time(), "%Y-%m-%d");
 }
 
-}
+} //namespace dr

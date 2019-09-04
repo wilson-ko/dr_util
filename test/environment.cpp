@@ -1,6 +1,6 @@
 #include "environment.hpp"
 
-#include <stdlib.h>
+#include <cstdlib>
 #include <gtest/gtest.h>
 
 int main(int argc, char ** argv) {
@@ -10,13 +10,13 @@ int main(int argc, char ** argv) {
 
 namespace dr {
 
-TEST(Environment, getEnvironment) {
+TEST(Environment, getEnvironment) { //NOLINT
 	::clearenv();
 	EXPECT_EQ(getEnvironment(), (std::map<std::string, std::string>{}));
-	::setenv("FOO", "aap", true);
+	::setenv("FOO", "aap", 1);
 	EXPECT_EQ(getEnvironment(), (std::map<std::string, std::string>{{"FOO", "aap"}}));
-	::setenv("BAR", "noot", true);
+	::setenv("BAR", "noot", 1);
 	EXPECT_EQ(getEnvironment(), (std::map<std::string, std::string>{{"FOO", "aap"}, {"BAR", "noot"}}));
 }
 
-}
+} //namespace dr

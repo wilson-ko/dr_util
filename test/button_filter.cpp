@@ -9,7 +9,7 @@ int main(int argc, char ** argv) {
 
 namespace dr {
 
-TEST(ButtonFilterTest, filterAlwaysHigh) {
+TEST(ButtonFilterTest, filterAlwaysHigh) { //NOLINT
 	ButtonFilter bf(true, false);
 
 	// pass through high signals always
@@ -18,7 +18,7 @@ TEST(ButtonFilterTest, filterAlwaysHigh) {
 	EXPECT_TRUE(bf.filter(true));
 }
 
-TEST(ButtonFilterTest, filterAlwaysLow) {
+TEST(ButtonFilterTest, filterAlwaysLow) { //NOLINT
 	ButtonFilter bf(false, true);
 
 	// pass through low signals always
@@ -27,7 +27,7 @@ TEST(ButtonFilterTest, filterAlwaysLow) {
 	EXPECT_FALSE(bf.filter(true));
 }
 
-TEST(ButtonFilterTest, filterAlwaysHighAndLow) {
+TEST(ButtonFilterTest, filterAlwaysHighAndLow) { //NOLINT
 	ButtonFilter bf(true, true);
 
 	// pass through any signal
@@ -37,7 +37,7 @@ TEST(ButtonFilterTest, filterAlwaysHighAndLow) {
 	EXPECT_TRUE(bf.filter(true));
 }
 
-TEST(ButtonFilterTest, filterRisingEdge) {
+TEST(ButtonFilterTest, filterRisingEdge) { //NOLINT
 	ButtonFilter bf;
 
 	// test rising edge
@@ -45,7 +45,7 @@ TEST(ButtonFilterTest, filterRisingEdge) {
 	EXPECT_TRUE(bf.filter(true));
 }
 
-TEST(ButtonFilterTest, filterFallingEdge) {
+TEST(ButtonFilterTest, filterFallingEdge) { //NOLINT
 	ButtonFilter bf;
 
 	// test falling edge
@@ -53,7 +53,7 @@ TEST(ButtonFilterTest, filterFallingEdge) {
 	EXPECT_TRUE(bf.filter(false));
 }
 
-TEST(ButtonFilterTest, filterMultiple) {
+TEST(ButtonFilterTest, filterMultiple) { //NOLINT
 	ButtonFilter bf;
 
 	// test multiple signals
@@ -67,4 +67,4 @@ TEST(ButtonFilterTest, filterMultiple) {
 	EXPECT_FALSE(bf.filter(true));
 }
 
-}
+} //namespace dr
