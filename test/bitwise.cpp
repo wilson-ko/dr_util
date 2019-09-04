@@ -9,7 +9,7 @@ int main(int argc, char ** argv) {
 
 namespace dr {
 
-TEST(BitwiseTest, makeBitMask) {
+TEST(BitwiseTest, makeBitMask) { //NOLINT
 	// least significant bit
 	EXPECT_EQ(0x1u,        bitMask(0));
 	// some middle bit
@@ -18,7 +18,7 @@ TEST(BitwiseTest, makeBitMask) {
 	EXPECT_EQ(0x80000000u, bitMask(31));
 }
 
-TEST(BitwiseTest, testTestBit) {
+TEST(BitwiseTest, testTestBit) { //NOLINT
 	// least significant bit
 	EXPECT_TRUE(testBit(0x1, 0));
 	EXPECT_FALSE(testBit(0x1, 14));
@@ -45,7 +45,7 @@ TEST(BitwiseTest, testTestBit) {
 	EXPECT_TRUE(testBit(0xFFFFFFFF, 31));
 }
 
-TEST(BitwiseTest, testTestRising) {
+TEST(BitwiseTest, testTestRising) { //NOLINT
 	// no change for all bits set to 1
 	EXPECT_FALSE(testRising(0xFFFFFFFF, 0xFFFFFFFF, 0));
 	EXPECT_FALSE(testRising(0xFFFFFFFF, 0xFFFFFFFF, 14));
@@ -77,4 +77,4 @@ TEST(BitwiseTest, testTestRising) {
 	EXPECT_FALSE(testRising(0x40000000, 0, 31));
 }
 
-}
+} //namespace dr
